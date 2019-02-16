@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="blueSky">#4CB5F5</color>
+    <color name="granite">#B7B8B6</color>
+    <color name="pine">#34675C</color>
+    <color name="fields">#B3C100</color>
+    <color name="shadow">#2A3132</color>
+    <color name="autumnFoliage">#763626</color>
+    <color name="stone">#336B87</color>
+    <color name="sunshine">#F9BA32</color>
+    <color name="steelBlue">#426E86</color>
+    <color name="bone">#F8F1E5</color>
+    <color name="coal">#2F3131</color>
+</resources>

@@ -1,0 +1,29 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/bone</item>
+        <item name="colorPrimaryDark">@color/steelBlue</item>
+        <item name="colorAccent">@color/coal</item>
+    </style>
+
+    <style name="AppTheme.Toolbar" parent="AppTheme">
+        <item name="android:textColorSecondary">@color/bone</item>
+    </style>
+
+    <style name="AppTheme.Picker" parent="Theme.AppCompat.Light.NoActionBar" >
+        <item name="android:textColorPrimary">@color/steelBlue</item>
+        <item name="android:background">@color/bone</item>
+    </style>
+
+    <style name="MyHintText" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@color/bone</item>
+    </style>
+
+    <style name="MyEditText" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="colorControlActivated">@color/bone</item>
+    </style>
+
+</resources>

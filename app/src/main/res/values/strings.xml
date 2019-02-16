@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">BirthdayReminder</string>
+    <string name="birthday">Urodziny</string>
+    <string name="name_day">Imieniny </string>
+    <string name="anniversary">Rocznica</string>
+    <string name="party">Impreza</string>
+    <string name="settings">ustawienia</string>
+    <string name="delete">Usuń</string>
+    <string name="add">Dodaj</string>
+    <string name="title">Tytuł</string>
+    <string name="showDate">Wybierz date</string>
+    <string name="month">Miesiąc</string>
+    <string name="day">Dzień</string>
+    <string name="error">Błąd</string>
+    <string name="type">Rodzaj</string>
+    <string name="background">tło</string>
+    <string name="accept">Ok</string>
+    <string name="cancel">Anuluj</string>
+    <string name="notifications">Powiadomienie</string>
+    <string name="save">Zapisz</string>
+</resources>
