@@ -67,7 +67,7 @@ public class DataBindingAdapters {
         }
     }
 
-    public static int eventTypeToResourceId(Event.EventType eventType){
+    public static int eventTypeToStringResourceId(Event.EventType eventType){
         switch(eventType){
             case PARTY: {
                 return R.string.party;
@@ -84,6 +84,26 @@ public class DataBindingAdapters {
 
             default:
                 return R.string.error;
+        }
+    }
+
+    public static int eventTypeToDrawableResourceId(Event.EventType eventType){
+        switch(eventType){
+            case PARTY: {
+                return R.drawable.party;
+            }
+            case BIRTHDAY:{
+                return R.drawable.birthday;
+            }
+            case NAME_DAY:{
+                return R.drawable.name;
+            }
+            case ANNIVERSARY: {
+                return R.drawable.anniversary;
+            }
+
+            default:
+                return R.drawable.party;
         }
     }
 

@@ -25,19 +25,19 @@
                 android:id="@+id/parallax_header_imageview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:contentDescription="@string/background"
                 android:scaleType="centerCrop"
                 android:src="@drawable/background"
                 app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="0.7"
-                android:contentDescription="@string/background" />
+                app:layout_collapseParallaxMultiplier="0.7" />
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@android:color/transparent"
-                app:theme="@style/AppTheme.Toolbar"
-                app:layout_collapseMode="pin" />
+                app:layout_collapseMode="pin"
+                app:theme="@style/AppTheme.Toolbar" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -55,25 +55,42 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/adView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                ads:adSize="SMART_BANNER"
+                ads:adUnitId="@string/AD_BANNER_ID" />
+
+            <Button
+                android:id="@+id/addFirstButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="8dp"
+                android:padding="4dp"
+                android:background="@drawable/rounded_rectangle"
+                android:backgroundTint="@color/steelBlue"
+                android:onClick="startFirstAdd"
+                android:text="@string/add_first_event"
+                android:textColor="@color/bone"
+                android:visibility="gone" />
+
+
+            <Button
+                android:id="@+id/deleteButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                app:cardCornerRadius="6dp"
-                app:cardElevation="6dp"
-                app:cardBackgroundColor="@color/bone">
-
-                <Button
-                    android:id="@+id/deleteButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/transparent"
-                    android:text="Usuń"
-                    android:onClick="delete"
-                    android:textAlignment="center"
-                    android:visibility="gone"
-                    />
-            </androidx.cardview.widget.CardView>
+                android:layout_margin="8dp"
+                android:padding="4dp"
+                android:background="@drawable/rounded_rectangle"
+                android:backgroundTint="@color/steelBlue"
+                android:onClick="delete"
+                android:text="@string/delete"
+                android:textAlignment="center"
+                android:textColor="@color/bone"
+                android:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/events"
@@ -81,7 +98,6 @@
                 android:layout_height="match_parent"
                 android:layoutAnimation="@anim/layout_animation_fall_down"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

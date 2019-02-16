@@ -28,7 +28,7 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
     CardView cardView;
 
     private EventLayoutBinding eventLayoutBinding;
-    protected ViewGroup rootGroup;
+    private ViewGroup rootGroup;
 
     public EventViewHolder(EventLayoutBinding eventLayoutBinding, ViewGroup rootGroup) {
         super(eventLayoutBinding.getRoot());
@@ -40,16 +40,13 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
 
     public void initShowMode() {
         cardView.setAlpha(1.0f);
-        cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Transition transition = new AutoTransition();
-                transition.setDuration(500);
+        cardView.setOnClickListener(view -> {
+            Transition transition = new AutoTransition();
+            transition.setDuration(500);
 
-                TransitionManager.beginDelayedTransition(rootGroup, transition);
-                int visibility = eventTitle.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE;
-                eventTitle.setVisibility(visibility);
-            }
+            TransitionManager.beginDelayedTransition(rootGroup, transition);
+            int visibility = eventTitle.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE;
+            eventTitle.setVisibility(visibility);
         });
     }
 

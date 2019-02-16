@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.rolnik.birthdayreminder.R;
@@ -72,6 +73,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventViewHolder> {
         this.mode = mode;
         notifyDataSetChanged();
     }
+
 
     @NonNull
     @Override

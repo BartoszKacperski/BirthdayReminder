@@ -10,6 +10,8 @@
 
     <style name="AppTheme.Toolbar" parent="AppTheme">
         <item name="android:textColorSecondary">@color/bone</item>
+        <item name="android:colorBackground">@color/bone</item>
+        <item name="android:textColor">@color/steelBlue</item>
     </style>
 
     <style name="AppTheme.Picker" parent="Theme.AppCompat.Light.NoActionBar" >
@@ -24,6 +26,10 @@
     <style name="MyEditText" parent="Theme.AppCompat.Light">
         <item name="colorControlNormal">@android:color/white</item>
         <item name="colorControlActivated">@color/bone</item>
+    </style>
+
+    <style name="MyErrorText" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@android:color/holo_red_light</item>
     </style>
 
 </resources>

@@ -29,7 +29,7 @@ public class EventTypeAdapter extends ArrayAdapter<Event.EventType> {
         TextView textView = convertView.findViewById(R.id.text);
 
         if(position < Event.EventType.values().length){
-            textView.setText(DataBindingAdapters.eventTypeToResourceId(Event.EventType.values()[position]));
+            textView.setText(DataBindingAdapters.eventTypeToStringResourceId(Event.EventType.values()[position]));
         }
 
         return convertView;
@@ -45,7 +45,7 @@ public class EventTypeAdapter extends ArrayAdapter<Event.EventType> {
         TextView textView = convertView.findViewById(R.id.text);
 
         if(position < Event.EventType.values().length){
-            textView.setText(DataBindingAdapters.eventTypeToResourceId(Event.EventType.values()[position]));
+            textView.setText(DataBindingAdapters.eventTypeToStringResourceId(Event.EventType.values()[position]));
         }
 
         return convertView;
