@@ -42,7 +42,17 @@ public class DataBindingAdapters {
     }
 
     public static String calendarToString(Calendar calendar){
+        if(calendar == null){
+            return "";
+        }
         return String.format(Locale.getDefault(), "%o %s", calendar.get(Calendar.DAY_OF_MONTH), romanMonths[calendar.get(Calendar.MONTH)]);
+    }
+
+    public static String calendarToStringFullNameMonths(Calendar calendar){
+        if(calendar == null){
+            calendar = Calendar.getInstance();
+        }
+        return calendar.get(Calendar.DAY_OF_MONTH) + " " + calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
     }
 
     @BindingAdapter("load_event_type")

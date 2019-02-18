@@ -1,7 +1,11 @@
 package com.rolnik.birthdayreminder.activities;
 
+import android.app.AlarmManager;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -15,6 +19,7 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputLayout;
 import com.rolnik.birthdayreminder.DataBindingAdapters;
 import com.rolnik.birthdayreminder.DatePickerDialog;
+import com.rolnik.birthdayreminder.NotificationPublisher;
 import com.rolnik.birthdayreminder.R;
 import com.rolnik.birthdayreminder.TextWatcherAdapter;
 import com.rolnik.birthdayreminder.adapters.EventTypeAdapter;
@@ -22,6 +27,10 @@ import com.rolnik.birthdayreminder.database.DataBaseService;
 import com.rolnik.birthdayreminder.database.EventDataBase;
 import com.rolnik.birthdayreminder.databinding.ActivityAddEventBinding;
 import com.rolnik.birthdayreminder.model.Event;
+
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -89,7 +98,15 @@ public class AddEventActivity extends AppCompatActivity {
 
     private void initBinding() {
         activityAddEventBinding = DataBindingUtil.setContentView(this, R.layout.activity_add_event);
-        activityAddEventBinding.setEvent(new Event());
+        Event event;
+
+        if(getIntent().hasExtra(getString(R.string.event))){
+            event = (Event) getIntent().getSerializableExtra(getString(R.string.event));
+        } else {
+            event = new Event();
+        }
+
+        activityAddEventBinding.setEvent(event);
     }
 
     private void initSpinner() {
@@ -153,7 +170,7 @@ public class AddEventActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Long aLong) {
                 Log.i("Saving event", "Event successfully add with id = " + aLong);
-                createNotification();
+                scheduleNotification(aLong);
                 moveToEventsActivity();
             }
 
@@ -169,36 +186,39 @@ public class AddEventActivity extends AppCompatActivity {
         });
     }
 
-    private void createNotification(){
-        Event currentEvent = activityAddEventBinding.getEvent();
-        Notification.Builder builder = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            builder = new Notification.Builder(this, getString(R.string.channel_id));
-        } else {
-            builder = new Notification.Builder(this);
+
+    private void scheduleNotification(final long eventID){
+        Calendar getEventDate = activityAddEventBinding.getEvent().getDate();
+        Intent notificationIntent = new Intent(getApplicationContext(), NotificationPublisher.class);
+        notificationIntent.putExtra(getString(R.string.event_id), eventID);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), (int) eventID, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+
+        calendar.set(Calendar.MONTH, getEventDate.get(Calendar.MONTH));
+        calendar.set(Calendar.DAY_OF_MONTH, getEventDate.get(Calendar.DAY_OF_MONTH));
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1;
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        Log.i("Scheduling", String.format("%d-%02d-%02d %02d:%02d", year, month, day, hour, minute));
+
+        if(alarmManager != null) {
+            alarmManager.cancel(pendingIntent);
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
         }
-
-        builder.setSmallIcon(DataBindingAdapters.eventTypeToDrawableResourceId(currentEvent.getEventType()));
-        builder.setContentTitle(getString(DataBindingAdapters.eventTypeToStringResourceId(currentEvent.getEventType())));
-        builder.setContentText(currentEvent.getTitle());
-        builder.setAutoCancel(true);
-        builder.setCategory(NotificationCompat.CATEGORY_MESSAGE);
-
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
-        notificationManagerCompat.notify(getNotificationId(), builder.build());
     }
 
-    private int getNotificationId(){
-        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.shared_pref_name), MODE_PRIVATE);
-        SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
 
-        int value = sharedPreferences.getInt(getString(R.string.notification_id), 0);
-
-        sharedPreferencesEditor.putInt(getString(R.string.notification_id), value + 1);
-        sharedPreferencesEditor.apply();
-
-        return value;
-    }
 
 
     private void moveToEventsActivity(){

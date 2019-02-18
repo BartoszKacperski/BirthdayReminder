@@ -1,5 +1,9 @@
 package com.rolnik.birthdayreminder.model;
 
+import android.os.Parcelable;
+
+import com.rolnik.birthdayreminder.BR;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -8,6 +12,7 @@ import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.annotation.NonNull;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 import lombok.EqualsAndHashCode;
@@ -15,7 +20,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 
 @Entity(tableName = "events")
-public class Event extends BaseObservable {
+public class Event extends BaseObservable implements Serializable {
     public enum EventType {
         BIRTHDAY(0), NAME_DAY(1), ANNIVERSARY(2), PARTY(3);
 
@@ -35,6 +40,7 @@ public class Event extends BaseObservable {
     private String title;
     private Calendar date;
     private EventType eventType;
+    private boolean hasNotification;
 
     public Event(int id, String title, Calendar date, EventType eventType) {
         this.id = id;
@@ -64,6 +70,7 @@ public class Event extends BaseObservable {
 
     public void setTitle(@NonNull String title) {
         this.title = title;
+        notifyPropertyChanged(BR.title);
     }
 
     @Bindable
@@ -73,6 +80,7 @@ public class Event extends BaseObservable {
 
     public void setDate(Calendar date) {
         this.date = date;
+        notifyPropertyChanged(BR.date);
     }
 
     @Bindable
@@ -82,5 +90,16 @@ public class Event extends BaseObservable {
 
     public void setEventType(EventType eventType) {
         this.eventType = eventType;
+        notifyPropertyChanged(BR.eventType);
+    }
+
+    @Bindable
+    public boolean isHasNotification() {
+        return hasNotification;
+    }
+
+    public void setHasNotification(boolean hasNotification) {
+        this.hasNotification = hasNotification;
+        notifyPropertyChanged(BR.hasNotification);
     }
 }

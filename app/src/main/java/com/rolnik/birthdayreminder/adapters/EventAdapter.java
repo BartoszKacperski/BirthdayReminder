@@ -86,7 +86,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull final EventViewHolder basicViewHolder, int i) {
         if(mode == Mode.SHOW){
-            basicViewHolder.initShowMode();
+            basicViewHolder.initShowMode(this.onSelectedListener);
         } else {
             basicViewHolder.initSelectMode(this.onSelectedListener);
         }

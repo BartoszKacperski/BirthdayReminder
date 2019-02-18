@@ -27,6 +27,9 @@
     <string name="channel_id">1013</string>
     <string name="channel_name">my_channel</string>
     <string name="shared_pref_name">notifications</string>
+    <string name="notification">notification</string>
     <string name="notification_id">notification_id</string>
+    <string name="event_id">id_wydarzenia</string>
+    <string name="event">wydarzenie</string>
     #END_NOTIFICATIONS
 </resources>

@@ -18,6 +18,8 @@ import java.util.List;
 public interface EventDao {
     @Query("Select * from events")
     Observable<List<Event>> getAll();
+    @Query("Select * from events where id = :id")
+    Single<Event> getEventWith(int id);
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Maybe<Long> insert(Event event);
     @Delete

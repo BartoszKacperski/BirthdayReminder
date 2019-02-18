@@ -13,8 +13,10 @@ import android.widget.Button;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.rolnik.birthdayreminder.R;
 import com.rolnik.birthdayreminder.adapters.EventAdapter;
+import com.rolnik.birthdayreminder.adapters.OnSelectedListener;
 import com.rolnik.birthdayreminder.database.DataBaseService;
 import com.rolnik.birthdayreminder.database.EventDataBase;
 import com.rolnik.birthdayreminder.model.Event;
@@ -45,14 +47,14 @@ public class EventsActivity extends AppCompatActivity {
     RecyclerView events;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.deleteButton)
-    Button deleteButton;
     @BindView(R.id.addFirstButton)
     Button addFirstButton;
     @BindView(R.id.nestedScrollView)
     NestedScrollView nestedScrollView;
     @BindView(R.id.adView)
     AdView adView;
+    @BindView(R.id.bottomNavigationView)
+    BottomNavigationView bottomNavigationView;
 
     private EventAdapter eventAdapter;
     private List<Event> selectedEvents = new ArrayList<>();
@@ -67,8 +69,8 @@ public class EventsActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         initEvents();
         initAdMob();
+        initBottomNavigation();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -100,20 +102,8 @@ public class EventsActivity extends AppCompatActivity {
         }
     }
 
-    public void delete(View view) {
-        removeEvents();
-    }
-
     private void initEvents() {
-        eventAdapter = new EventAdapter(new ArrayList<>(), this, root, position -> {
-            Event selectedEvent = eventAdapter.getItem(position);
-
-            if(selectedEvents.contains(selectedEvent)){
-                selectedEvents.remove(selectedEvent);
-            } else {
-                selectedEvents.add(eventAdapter.getItem(position));
-            }
-        });
+        eventAdapter = new EventAdapter(new ArrayList<>(), this, root, createOnSelectedListener());
 
         eventAdapter.setHasStableIds(true);
         events.setAdapter(eventAdapter);
@@ -125,10 +115,54 @@ public class EventsActivity extends AppCompatActivity {
         loadEvents();
     }
 
+    private OnSelectedListener createOnSelectedListener(){
+        return new OnSelectedListener() {
+            @Override
+            public void onSelected(int position) {
+                Event selectedEvent = eventAdapter.getItem(position);
+
+                if(selectedEvents.contains(selectedEvent)){
+                    selectedEvents.remove(selectedEvent);
+                } else {
+                    selectedEvents.add(eventAdapter.getItem(position));
+                }
+            }
+
+            @Override
+            public void onLongClick(int position) {
+                startAddEventActivityWithExistedEvent(eventAdapter.getItem(position));
+            }
+        };
+    }
+
+    private void startAddEventActivityWithExistedEvent(Event event){
+        Intent intent = new Intent(this, AddEventActivity.class);
+
+        intent.putExtra(getString(R.string.event), event);
+
+        startActivity(intent);
+    }
+
     private void initAdMob() {
         MobileAds.initialize(this, getString(R.string.AD_BANNER_ID));
         AdRequest adRequest = new AdRequest.Builder().addTestDevice("5D7F69A3D73C399D9254BFAE86A8E37B").addTestDevice("62C5E6B1611C3CA6C1DEFA2C30D325EA").build();
         adView.loadAd(adRequest);
+    }
+
+
+    private void initBottomNavigation() {
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()){
+                case R.id.delete:
+                    removeEvents();
+                    return true;
+                case R.id.cancel:
+                    changeRecyclerModeToShow();
+                    return true;
+                default:
+                    return false;
+            }
+        });
     }
 
     public void startFirstAdd(View view){
@@ -206,13 +240,15 @@ public class EventsActivity extends AppCompatActivity {
     private void changeRecyclerModeToShow(){
         eventAdapter.setMode(EventAdapter.Mode.SHOW);
         TransitionManager.beginDelayedTransition(root);
-        deleteButton.setVisibility(View.GONE);
+        bottomNavigationView.setVisibility(View.GONE);
+        adView.setVisibility(View.VISIBLE);
     }
 
     private void changeRecyclerModeToSelect(){
-        TransitionManager.beginDelayedTransition(nestedScrollView);
         eventAdapter.setMode(EventAdapter.Mode.SELECT);
-        deleteButton.setVisibility(View.VISIBLE);
+        TransitionManager.beginDelayedTransition(root);
+        bottomNavigationView.setVisibility(View.VISIBLE);
+        adView.setVisibility(View.GONE);
     }
 
     private void showAddFirstButtonIf(boolean emptyEvents){

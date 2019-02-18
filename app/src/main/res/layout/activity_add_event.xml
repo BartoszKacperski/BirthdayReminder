@@ -4,10 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="Event"
-            type="com.rolnik.birthdayreminder.model.Event"/>
-        <import type="com.rolnik.birthdayreminder.DataBindingAdapters"/>
+            type="com.rolnik.birthdayreminder.model.Event" />
+
+        <import type="com.rolnik.birthdayreminder.DataBindingAdapters" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,9 +27,9 @@
             android:layout_marginBottom="8dp"
             android:background="@drawable/rounded_rectangle"
             android:backgroundTint="@color/bone"
+            android:onClick="save"
             android:text="@string/save"
             android:textColor="@color/steelBlue"
-            android:onClick="save"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -39,9 +41,9 @@
             android:layout_marginBottom="8dp"
             android:background="@drawable/rounded_rectangle"
             android:backgroundTint="@color/bone"
+            android:onClick="cancel"
             android:text="@string/cancel"
             android:textColor="@color/steelBlue"
-            android:onClick="cancel"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -55,13 +57,21 @@
             android:layout_marginBottom="8dp"
             android:background="@drawable/rounded_rectangle"
             android:backgroundTint="@color/steelBlue"
+            android:onClick="cancel"
             android:orientation="vertical"
             android:padding="8dp"
-            android:onClick="cancel"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
+
+            <Spinner
+                android:id="@+id/eventType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="8dp"
+                app:selectedValue="@={Event.eventType}" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout"
@@ -69,8 +79,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/title"
                 app:errorEnabled="true"
-                app:hintTextAppearance="@style/MyHintText"
-                app:errorTextAppearance="@style/MyErrorText">
+                app:errorTextAppearance="@style/MyErrorText"
+                app:hintTextAppearance="@style/MyHintText">
 
                 <EditText
                     android:id="@+id/eventTitle"
@@ -79,28 +89,29 @@
                     android:layout_margin="8dp"
                     android:ems="10"
                     android:hint="@string/title"
-                    android:inputType="textMultiLine"
+                    android:inputType="text"
+                    android:text="@={Event.title}"
                     android:textColor="@color/bone"
                     android:theme="@style/MyEditText"
-                    android:text="@={Event.title}"
                     tools:ignore="Autofill,LabelFor" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_margin="8dp"
+                android:orientation="horizontal"
                 android:weightSum="2">
 
-                <Spinner
-                    android:id="@+id/eventType"
+                <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_gravity="center"
                     android:layout_weight="1"
-                    app:selectedValue="@={Event.eventType}"/>
+                    android:layout_marginEnd="8dp"
+                    android:layout_gravity="center"
+                    android:text="@{DataBindingAdapters.calendarToStringFullNameMonths(Event.date)}"
+                    android:textColor="@color/bone"
+                    android:textAlignment="center"/>
                 <Button
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -112,6 +123,7 @@
                     android:padding="8dp"
                     android:text="@string/showDate"
                     android:textColor="@color/steelBlue" />
+
             </LinearLayout>
 
             <CheckBox
@@ -119,9 +131,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_margin="8dp"
+                android:checked="@={Event.hasNotification}"
                 android:switchPadding="8dp"
                 android:text="@string/notifications"
-                android:textColor="@color/bone"/>
+                android:textColor="@color/bone" />
+
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

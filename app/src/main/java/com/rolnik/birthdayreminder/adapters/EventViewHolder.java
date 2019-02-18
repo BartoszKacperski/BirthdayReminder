@@ -38,8 +38,9 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
     }
 
 
-    public void initShowMode() {
+    public void initShowMode(final OnSelectedListener onSelectedListener) {
         cardView.setAlpha(1.0f);
+        eventTitle.setVisibility(View.GONE);
         cardView.setOnClickListener(view -> {
             Transition transition = new AutoTransition();
             transition.setDuration(500);
@@ -48,21 +49,24 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
             int visibility = eventTitle.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE;
             eventTitle.setVisibility(visibility);
         });
+
+        cardView.setOnLongClickListener(view -> {
+            onSelectedListener.onLongClick(getAdapterPosition());
+            return true;
+        });
     }
 
     public void initSelectMode(final OnSelectedListener onSelectedListener) {
         cardView.setAlpha(0.5f);
-        cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Transition transition = new AutoTransition();
-                transition.setDuration(500);
+        eventTitle.setVisibility(View.VISIBLE);
+        cardView.setOnClickListener(view -> {
+            Transition transition = new AutoTransition();
+            transition.setDuration(500);
 
-                TransitionManager.beginDelayedTransition(rootGroup, transition);
-                float alpha = cardView.getAlpha() == 1.f ? 0.5f : 1.f;
-                cardView.setAlpha(alpha);
-                onSelectedListener.onSelected(getAdapterPosition());
-            }
+            TransitionManager.beginDelayedTransition(rootGroup, transition);
+            float alpha = cardView.getAlpha() == 1.f ? 0.5f : 1.f;
+            cardView.setAlpha(alpha);
+            onSelectedListener.onSelected(getAdapterPosition());
         });
     }
 

@@ -11,7 +11,7 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="254dp"
+        android:layout_height="150dp"
         android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -55,14 +55,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/adView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                ads:adSize="SMART_BANNER"
-                ads:adUnitId="@string/AD_BANNER_ID" />
-
             <Button
                 android:id="@+id/addFirstButton"
                 android:layout_width="wrap_content"
@@ -77,21 +69,6 @@
                 android:textColor="@color/bone"
                 android:visibility="gone" />
 
-
-            <Button
-                android:id="@+id/deleteButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:padding="4dp"
-                android:background="@drawable/rounded_rectangle"
-                android:backgroundTint="@color/steelBlue"
-                android:onClick="delete"
-                android:text="@string/delete"
-                android:textAlignment="center"
-                android:textColor="@color/bone"
-                android:visibility="gone" />
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/events"
                 android:layout_width="match_parent"
@@ -101,5 +78,25 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        ads:adSize="SMART_BANNER"
+        ads:adUnitId="@string/AD_BANNER_ID" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@android:color/transparent"
+        android:visibility="gone"
+        app:menu="@menu/bottom"
+        app:itemIconTint="@color/steelBlue"
+        app:itemTextColor="@color/steelBlue"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rolnik.birthdayreminder.DataBindingAdapters;
@@ -27,9 +28,11 @@ public class EventTypeAdapter extends ArrayAdapter<Event.EventType> {
         }
 
         TextView textView = convertView.findViewById(R.id.text);
+        ImageView imageView = convertView.findViewById(R.id.eventTypeImage);
 
         if(position < Event.EventType.values().length){
             textView.setText(DataBindingAdapters.eventTypeToStringResourceId(Event.EventType.values()[position]));
+            imageView.setImageResource(DataBindingAdapters.eventTypeToDrawableResourceId(Event.EventType.values()[position]));
         }
 
         return convertView;
@@ -43,9 +46,11 @@ public class EventTypeAdapter extends ArrayAdapter<Event.EventType> {
         }
 
         TextView textView = convertView.findViewById(R.id.text);
+        ImageView imageView = convertView.findViewById(R.id.eventTypeImage);
 
         if(position < Event.EventType.values().length){
             textView.setText(DataBindingAdapters.eventTypeToStringResourceId(Event.EventType.values()[position]));
+            imageView.setImageResource(DataBindingAdapters.eventTypeToDrawableResourceId(Event.EventType.values()[position]));
         }
 
         return convertView;
