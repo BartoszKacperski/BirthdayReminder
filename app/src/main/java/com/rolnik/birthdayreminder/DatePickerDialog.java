@@ -29,12 +29,7 @@ public class DatePickerDialog extends Dialog {
     }
 
     private void init(){
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dismiss();
-            }
-        });
+        cancelButton.setOnClickListener(view -> dismiss());
     }
 
     public void setOnAcceptListener(View.OnClickListener onAcceptListener){

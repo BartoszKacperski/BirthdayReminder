@@ -57,7 +57,6 @@
             android:layout_marginBottom="8dp"
             android:background="@drawable/rounded_rectangle"
             android:backgroundTint="@color/steelBlue"
-            android:onClick="cancel"
             android:orientation="vertical"
             android:padding="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -133,7 +132,7 @@
                 android:layout_margin="8dp"
                 android:checked="@={Event.hasNotification}"
                 android:switchPadding="8dp"
-                android:text="@string/notifications"
+                android:text="@string/notification"
                 android:textColor="@color/bone" />
 
         </LinearLayout>

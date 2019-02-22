@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.rolnik.birthdayreminder.R;
 import com.rolnik.birthdayreminder.databinding.EventLayoutBinding;
 import com.rolnik.birthdayreminder.model.Event;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class EventAdapter extends RecyclerView.Adapter<EventViewHolder> {

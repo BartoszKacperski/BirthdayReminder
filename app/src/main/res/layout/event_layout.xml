@@ -37,7 +37,8 @@
                 android:layout_margin="8dp"
                 android:layout_weight="1"
                 android:backgroundTint="@color/coal"
-                app:load_image="@{event.eventType}" />
+                app:load_image="@{event.eventType}"
+                android:contentDescription="@string/event" />
 
             <TextView
                 android:id="@+id/eventType"

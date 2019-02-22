@@ -19,6 +19,8 @@ import com.rolnik.birthdayreminder.adapters.EventAdapter;
 import com.rolnik.birthdayreminder.adapters.OnSelectedListener;
 import com.rolnik.birthdayreminder.database.DataBaseService;
 import com.rolnik.birthdayreminder.database.EventDataBase;
+import com.rolnik.birthdayreminder.dialogs.IconInfoDialog;
+import com.rolnik.birthdayreminder.dialogs.NotificationInfoDialog;
 import com.rolnik.birthdayreminder.model.Event;
 
 import java.util.ArrayList;
@@ -88,6 +90,12 @@ public class EventsActivity extends AppCompatActivity {
             case R.id.add:
                 startAddActivity();
                 return true;
+            case R.id.notification:
+                showNotificationInfoDialog();
+                return true;
+            case R.id.icons:
+                showIconsInfoDialog();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -149,6 +157,18 @@ public class EventsActivity extends AppCompatActivity {
         adView.loadAd(adRequest);
     }
 
+    private void showNotificationInfoDialog() {
+        NotificationInfoDialog infoDialog = new NotificationInfoDialog(this);
+
+        infoDialog.show();
+    }
+
+    private void showIconsInfoDialog() {
+        IconInfoDialog infoDialog = new IconInfoDialog(this);
+
+        infoDialog.show();
+    }
+
 
     private void initBottomNavigation() {
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
@@ -174,7 +194,6 @@ public class EventsActivity extends AppCompatActivity {
 
         startActivity(intent);
     }
-
 
 
     private void loadEvents() {

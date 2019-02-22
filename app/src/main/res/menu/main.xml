@@ -7,4 +7,10 @@
     <item
         android:id="@+id/add"
         android:title="@string/add"/>
+    <item
+        android:id="@+id/notification"
+        android:title="@string/notifications"/>
+    <item
+        android:id="@+id/icons"
+        android:title="@string/icons"/>
 </menu>

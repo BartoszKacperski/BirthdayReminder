@@ -16,20 +16,26 @@
     <string name="background">tło</string>
     <string name="accept">OK</string>
     <string name="cancel">Anuluj</string>
-    <string name="notifications">Powiadomienie</string>
+    <string name="notification">Powiadomienie</string>
+    <string name="notifications">Powiadomienia</string>
     <string name="save">Zapisz</string>
     <string name="AD_BANNER_ID">ca-app-pub-3940256099942544/6300978111</string>
     <string name="add_first_event">Dodaj pierwsze wydarzenie</string>
     <string name="fill_date">Uzupełnij date wydarzenia</string>
     <string name="fill_title">Uzupełnij tytuł wydarzenia</string>
+    <string name="ok">OK</string>
+    <string name="open_settings">Otwórz ustawienia</string>
+    <string name="icons">Ikony</string>
+    <string name="authors">Autorzy</string>
 
     #NOTIFICATIONS
     <string name="channel_id">1013</string>
     <string name="channel_name">my_channel</string>
     <string name="shared_pref_name">notifications</string>
-    <string name="notification">notification</string>
+    <string name="notification_sp">notification</string>
     <string name="notification_id">notification_id</string>
     <string name="event_id">id_wydarzenia</string>
     <string name="event">wydarzenie</string>
+    <string name="notification_info">Aby powiadomienia przychodziły pamiętaj o ich włączęniu w ustawieniach aplikacji</string>
     #END_NOTIFICATIONS
 </resources>

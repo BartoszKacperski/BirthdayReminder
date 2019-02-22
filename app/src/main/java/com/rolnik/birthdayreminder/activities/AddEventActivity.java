@@ -17,6 +17,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.rolnik.birthdayreminder.AlarmCreator;
 import com.rolnik.birthdayreminder.DataBindingAdapters;
 import com.rolnik.birthdayreminder.DatePickerDialog;
 import com.rolnik.birthdayreminder.NotificationPublisher;
@@ -104,6 +105,7 @@ public class AddEventActivity extends AppCompatActivity {
             event = (Event) getIntent().getSerializableExtra(getString(R.string.event));
         } else {
             event = new Event();
+            event.setDate(Calendar.getInstance());
         }
 
         activityAddEventBinding.setEvent(event);
@@ -143,7 +145,7 @@ public class AddEventActivity extends AppCompatActivity {
         } else if(createdEvent.getDate() == null){
             showToast(getString(R.string.fill_date));
             return false;
-        } else if(createdEvent.getTitle().isEmpty()){
+        } else if(createdEvent.getTitle() == null || createdEvent.getTitle().isEmpty()){
             textInputLayout.setError(getString(R.string.fill_title));
             return false;
         }
@@ -170,7 +172,10 @@ public class AddEventActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Long aLong) {
                 Log.i("Saving event", "Event successfully add with id = " + aLong);
-                scheduleNotification(aLong);
+                if(event.isHasNotification()){
+                    event.setId(aLong.intValue());
+                    AlarmCreator.createAlarm(getApplicationContext(), event);
+                }
                 moveToEventsActivity();
             }
 
@@ -185,40 +190,6 @@ public class AddEventActivity extends AppCompatActivity {
             }
         });
     }
-
-
-    private void scheduleNotification(final long eventID){
-        Calendar getEventDate = activityAddEventBinding.getEvent().getDate();
-        Intent notificationIntent = new Intent(getApplicationContext(), NotificationPublisher.class);
-        notificationIntent.putExtra(getString(R.string.event_id), eventID);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), (int) eventID, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
-
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-
-        calendar.set(Calendar.MONTH, getEventDate.get(Calendar.MONTH));
-        calendar.set(Calendar.DAY_OF_MONTH, getEventDate.get(Calendar.DAY_OF_MONTH));
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH) + 1;
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-
-        Log.i("Scheduling", String.format("%d-%02d-%02d %02d:%02d", year, month, day, hour, minute));
-
-        if(alarmManager != null) {
-            alarmManager.cancel(pendingIntent);
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
-        }
-    }
-
-
 
 
     private void moveToEventsActivity(){

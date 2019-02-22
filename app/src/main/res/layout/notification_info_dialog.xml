@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/bone"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/notificationInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/notification_info"
+        android:textSize="14sp"
+        android:textColor="@color/steelBlue" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/okButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+            android:background="@android:color/transparent"
+            android:text="@string/ok"
+            android:textColor="@color/steelBlue"/>
+
+        <Button
+            android:id="@+id/openSettings"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+            android:padding="8dp"
+            android:background="@android:color/transparent"
+            android:text="@string/open_settings"
+            android:textColor="@color/steelBlue" />
+    </LinearLayout>
+
+</LinearLayout>

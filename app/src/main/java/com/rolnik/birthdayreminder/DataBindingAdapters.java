@@ -4,6 +4,8 @@ import androidx.databinding.BindingAdapter;
 import androidx.databinding.InverseBindingAdapter;
 import androidx.databinding.InverseBindingListener;
 import androidx.appcompat.widget.AppCompatSpinner;
+
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -45,7 +47,8 @@ public class DataBindingAdapters {
         if(calendar == null){
             return "";
         }
-        return String.format(Locale.getDefault(), "%o %s", calendar.get(Calendar.DAY_OF_MONTH), romanMonths[calendar.get(Calendar.MONTH)]);
+
+        return String.format(Locale.getDefault(), "%d %s", calendar.get(Calendar.DAY_OF_MONTH), romanMonths[calendar.get(Calendar.MONTH)]);
     }
 
     public static String calendarToStringFullNameMonths(Calendar calendar){
