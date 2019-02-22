@@ -42,7 +42,7 @@
             android:textColor="@color/bone"/>
     </LinearLayout>
 
-    <com.rolnik.birthdayreminder.CustomDatePicker
+    <com.rolnik.birthdayreminder.dialogs.CustomDatePicker
         android:id="@+id/customDatePicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -50,5 +50,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    </com.rolnik.birthdayreminder.CustomDatePicker>
+    </com.rolnik.birthdayreminder.dialogs.CustomDatePicker>
 </androidx.constraintlayout.widget.ConstraintLayout>

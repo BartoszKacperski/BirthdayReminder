@@ -1,4 +1,4 @@
-package com.rolnik.birthdayreminder;
+package com.rolnik.birthdayreminder.notificationserivces;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -6,6 +6,8 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.rolnik.birthdayreminder.R;
+import com.rolnik.birthdayreminder.activities.DataBindingAdapters;
 import com.rolnik.birthdayreminder.model.Event;
 
 import androidx.core.app.NotificationCompat;

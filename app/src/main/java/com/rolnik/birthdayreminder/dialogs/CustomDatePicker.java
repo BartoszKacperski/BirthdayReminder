@@ -1,10 +1,12 @@
-package com.rolnik.birthdayreminder;
+package com.rolnik.birthdayreminder.dialogs;
 
 import android.content.Context;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.NumberPicker;
+
+import com.rolnik.birthdayreminder.R;
 
 import java.text.DateFormatSymbols;
 import java.util.Calendar;

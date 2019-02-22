@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.rolnik.birthdayreminder.DataBindingAdapters;
+import com.rolnik.birthdayreminder.activities.DataBindingAdapters;
 import com.rolnik.birthdayreminder.R;
 import com.rolnik.birthdayreminder.model.Event;
 

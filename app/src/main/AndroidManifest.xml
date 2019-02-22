@@ -11,9 +11,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <receiver android:name=".NotificationPublisher"/>
-        <receiver android:name=".NotificationWakeupPublisher"
+        android:theme="@style/AppTheme"
+        android:name=".BirthdayReminderApplication">
+        <receiver android:name=".notificationserivces.NotificationPublisher"/>
+        <receiver android:name=".notificationserivces.NotificationWakeupPublisher"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"></action>

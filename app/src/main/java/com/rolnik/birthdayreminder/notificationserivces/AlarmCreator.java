@@ -1,4 +1,4 @@
-package com.rolnik.birthdayreminder;
+package com.rolnik.birthdayreminder.notificationserivces;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -6,9 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.rolnik.birthdayreminder.R;
 import com.rolnik.birthdayreminder.model.Event;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class AlarmCreator {
@@ -37,7 +37,7 @@ public class AlarmCreator {
         Log.i("Time = ", calendar.toString());
         if (alarmManager != null) {
             alarmManager.cancel(pendingIntent);
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         }
     }
 }

@@ -1,13 +1,6 @@
 package com.rolnik.birthdayreminder.activities;
 
-import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,10 +10,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
-import com.rolnik.birthdayreminder.AlarmCreator;
-import com.rolnik.birthdayreminder.DataBindingAdapters;
-import com.rolnik.birthdayreminder.DatePickerDialog;
-import com.rolnik.birthdayreminder.NotificationPublisher;
+import com.rolnik.birthdayreminder.notificationserivces.AlarmCreator;
+import com.rolnik.birthdayreminder.dialogs.DatePickerDialog;
 import com.rolnik.birthdayreminder.R;
 import com.rolnik.birthdayreminder.TextWatcherAdapter;
 import com.rolnik.birthdayreminder.adapters.EventTypeAdapter;
@@ -30,13 +21,9 @@ import com.rolnik.birthdayreminder.databinding.ActivityAddEventBinding;
 import com.rolnik.birthdayreminder.model.Event;
 
 import java.util.Calendar;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.databinding.DataBindingUtil;
 import butterknife.BindView;
 import butterknife.ButterKnife;

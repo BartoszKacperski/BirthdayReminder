@@ -9,7 +9,7 @@
             name="Event"
             type="com.rolnik.birthdayreminder.model.Event" />
 
-        <import type="com.rolnik.birthdayreminder.DataBindingAdapters" />
+        <import type="com.rolnik.birthdayreminder.activities.DataBindingAdapters" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

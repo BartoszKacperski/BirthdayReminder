@@ -1,12 +1,13 @@
-package com.rolnik.birthdayreminder;
+package com.rolnik.birthdayreminder.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
 import android.widget.Button;
 
+import com.rolnik.birthdayreminder.R;
+
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

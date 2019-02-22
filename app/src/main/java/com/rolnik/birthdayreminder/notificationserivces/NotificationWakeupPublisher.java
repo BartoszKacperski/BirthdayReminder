@@ -1,7 +1,5 @@
-package com.rolnik.birthdayreminder;
+package com.rolnik.birthdayreminder.notificationserivces;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,8 +8,8 @@ import android.util.Log;
 import com.rolnik.birthdayreminder.database.DataBaseService;
 import com.rolnik.birthdayreminder.database.EventDataBase;
 import com.rolnik.birthdayreminder.model.Event;
+import com.rolnik.birthdayreminder.notificationserivces.AlarmCreator;
 
-import java.util.Calendar;
 import java.util.Objects;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
