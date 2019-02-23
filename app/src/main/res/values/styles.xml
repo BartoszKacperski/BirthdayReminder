@@ -32,4 +32,7 @@
         <item name="android:textColor">@android:color/holo_red_light</item>
     </style>
 
+    <style name="MyOverflowText" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@android:color/holo_red_light</item>
+    </style>
 </resources>

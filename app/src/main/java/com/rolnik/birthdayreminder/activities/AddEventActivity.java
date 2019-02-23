@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.rolnik.birthdayreminder.notificationserivces.AlarmCreator;
 import com.rolnik.birthdayreminder.dialogs.DatePickerDialog;
@@ -42,7 +43,7 @@ public class AddEventActivity extends AppCompatActivity {
     @BindView(R.id.textInputLayout)
     TextInputLayout textInputLayout;
     @BindView(R.id.eventTitle)
-    EditText eventTitle;
+    TextInputEditText eventTitle;
 
     private DatePickerDialog datePickerDialog;
     private ActivityAddEventBinding activityAddEventBinding;

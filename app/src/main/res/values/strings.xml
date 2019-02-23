@@ -40,4 +40,6 @@
     #END_NOTIFICATIONS
 
     <string name="first_run">Pierwsze uruchomienie</string>
+    <string name="phone">telefon</string>
+    <string name="sms">sms</string>
 </resources>
