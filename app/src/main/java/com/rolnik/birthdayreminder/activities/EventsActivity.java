@@ -22,6 +22,7 @@ import com.rolnik.birthdayreminder.database.EventDataBase;
 import com.rolnik.birthdayreminder.dialogs.IconInfoDialog;
 import com.rolnik.birthdayreminder.dialogs.NotificationInfoDialog;
 import com.rolnik.birthdayreminder.model.Event;
+import com.rolnik.birthdayreminder.notificationserivces.AlarmCreator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -239,6 +240,9 @@ public class EventsActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Integer integer) {
                 Log.i("Deleting events", "Deleted " + integer + " events");
+                for(Event event : selectedEvents) {
+                    AlarmCreator.cancelAlarm(getApplicationContext(), event);
+                }
                 selectedEvents.clear();
                 changeRecyclerModeToShow();
             }

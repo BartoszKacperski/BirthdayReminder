@@ -1,26 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.rolnik.birthdayreminder">
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
+        android:name=".BirthdayReminderApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name=".BirthdayReminderApplication">
-        <receiver android:name=".notificationserivces.NotificationPublisher"/>
-        <receiver android:name=".notificationserivces.NotificationWakeupPublisher"
+        android:theme="@style/AppTheme">
+        <activity android:name=".activities.NotificationEvent"></activity>
+
+        <receiver android:name=".notificationserivces.NotificationPublisher" />
+        <receiver
+            android:name=".notificationserivces.NotificationWakeupPublisher"
             android:enabled="true">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <activity android:name=".activities.AddEventActivity"></activity>
+
+        <activity android:name=".activities.AddEventActivity" />
         <activity android:name=".activities.EventsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,9 +32,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-2475764705473892~7484598349"/>
+            android:value="ca-app-pub-2475764705473892~7484598349" />
     </application>
 
 </manifest>

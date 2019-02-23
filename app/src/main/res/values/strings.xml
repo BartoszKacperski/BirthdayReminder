@@ -37,6 +37,7 @@
     <string name="event_id">id_wydarzenia</string>
     <string name="event">wydarzenie</string>
     <string name="notification_info">Aby powiadomienia przychodziły pamiętaj o ich włączęniu w ustawieniach aplikacji</string>
-    <string name="update_notification_year">notification_year</string>
     #END_NOTIFICATIONS
+
+    <string name="first_run">Pierwsze uruchomienie</string>
 </resources>

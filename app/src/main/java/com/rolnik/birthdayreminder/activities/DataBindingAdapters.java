@@ -1,4 +1,4 @@
-package com.rolnik.birthdayreminder;
+package com.rolnik.birthdayreminder.activities;
 
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.InverseBindingAdapter;
@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.rolnik.birthdayreminder.R;
 import com.rolnik.birthdayreminder.adapters.EventTypeAdapter;
 import com.rolnik.birthdayreminder.model.Event;
 
