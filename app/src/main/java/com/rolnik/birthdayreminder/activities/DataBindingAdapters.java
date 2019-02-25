@@ -14,7 +14,9 @@ import android.widget.TextView;
 
 import com.rolnik.birthdayreminder.R;
 import com.rolnik.birthdayreminder.adapters.EventTypeAdapter;
+import com.rolnik.birthdayreminder.adapters.PhoneContactsAdapter;
 import com.rolnik.birthdayreminder.model.Event;
+import com.rolnik.birthdayreminder.model.PhoneContact;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -24,24 +26,7 @@ public class DataBindingAdapters {
 
     @BindingAdapter("load_image")
     public static void setImageResource(ImageView imageView, Event.EventType eventType){
-        switch(eventType){
-            case PARTY: {
-                imageView.setImageResource(R.drawable.party);
-                break;
-            }
-            case BIRTHDAY:{
-                imageView.setImageResource(R.drawable.birthday);
-                break;
-            }
-            case NAME_DAY:{
-                imageView.setImageResource(R.drawable.name);
-                break;
-            }
-            case ANNIVERSARY: {
-                imageView.setImageResource(R.drawable.anniversary);
-                break;
-            }
-        }
+        imageView.setImageResource(eventTypeToDrawableResourceId(eventType));
     }
 
     public static String calendarToString(Calendar calendar){
@@ -61,27 +46,13 @@ public class DataBindingAdapters {
 
     @BindingAdapter("load_event_type")
     public static void eventTypeToString(TextView textView, Event.EventType eventType){
-        switch(eventType){
-            case PARTY: {
-                textView.setText(R.string.party);
-                break;
-            }
-            case BIRTHDAY:{
-                textView.setText(R.string.birthday);
-                break;
-            }
-            case NAME_DAY:{
-                textView.setText(R.string.name_day);
-                break;
-            }
-            case ANNIVERSARY: {
-                textView.setText(R.string.anniversary);
-                break;
-            }
-        }
+        textView.setText(eventTypeToStringResourceId(eventType));
     }
 
     public static int eventTypeToStringResourceId(Event.EventType eventType){
+        if(eventType == null){
+            return R.string.error;
+        }
         switch(eventType){
             case PARTY: {
                 return R.string.party;
@@ -102,6 +73,9 @@ public class DataBindingAdapters {
     }
 
     public static int eventTypeToDrawableResourceId(Event.EventType eventType){
+        if(eventType == null) {
+            return R.drawable.ic_error_black;
+        }
         switch(eventType){
             case PARTY: {
                 return R.drawable.party;
@@ -121,8 +95,8 @@ public class DataBindingAdapters {
         }
     }
 
-    @BindingAdapter(value = {"selectedValue", "selectedValueAttrChanged"}, requireAll = false)
-    public static void bindSpinnerData(Spinner spinner, Event.EventType eventType, final InverseBindingListener newTextAttrChanged) {
+    @BindingAdapter(value = {"selectedEventTypeValue", "selectedEventTypeValueAttrChanged"}, requireAll = false)
+    public static void bindSpinnerEventTypeData(Spinner spinner, Event.EventType eventType, final InverseBindingListener newTextAttrChanged) {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -137,8 +111,34 @@ public class DataBindingAdapters {
             spinner.setSelection(pos, true);
         }
     }
-    @InverseBindingAdapter(attribute = "selectedValue", event = "selectedValueAttrChanged")
-    public static Event.EventType captureSelectedValue(Spinner spinner) {
+
+    @InverseBindingAdapter(attribute = "selectedEventTypeValue", event = "selectedEventTypeValueAttrChanged")
+    public static Event.EventType captureEventTypeSelectedValue(Spinner spinner) {
         return (Event.EventType) spinner.getSelectedItem();
+    }
+
+    @BindingAdapter(value = {"selectedPhoneContactValue", "selectedPhoneContactValueAttrChanged"}, requireAll = false)
+    public static void bindSpinnerPhoneContactData(Spinner spinner, PhoneContact phoneContact, final InverseBindingListener newTextAttrChanged) {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                newTextAttrChanged.onChange();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+        if (phoneContact != null) {
+            if(spinner.getAdapter() != null){
+                int pos = ((PhoneContactsAdapter) spinner.getAdapter()).getPosition(phoneContact);
+                if(pos > 0){
+                    spinner.setSelection(pos, true);
+                }
+            }
+        }
+    }
+    @InverseBindingAdapter(attribute = "selectedPhoneContactValue", event = "selectedPhoneContactValueAttrChanged")
+    public static PhoneContact captureSelectedPhoneContactValue(Spinner spinner) {
+        return (PhoneContact) spinner.getSelectedItem();
     }
 }

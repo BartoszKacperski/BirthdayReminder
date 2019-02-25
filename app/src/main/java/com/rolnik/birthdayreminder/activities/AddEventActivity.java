@@ -1,37 +1,50 @@
 package com.rolnik.birthdayreminder.activities;
 
+import android.Manifest;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.rolnik.birthdayreminder.notificationserivces.AlarmCreator;
-import com.rolnik.birthdayreminder.dialogs.DatePickerDialog;
 import com.rolnik.birthdayreminder.R;
 import com.rolnik.birthdayreminder.TextWatcherAdapter;
 import com.rolnik.birthdayreminder.adapters.EventTypeAdapter;
+import com.rolnik.birthdayreminder.adapters.PhoneContactsAdapter;
 import com.rolnik.birthdayreminder.database.DataBaseService;
 import com.rolnik.birthdayreminder.database.EventDataBase;
 import com.rolnik.birthdayreminder.databinding.ActivityAddEventBinding;
+import com.rolnik.birthdayreminder.dialogs.DatePickerDialog;
 import com.rolnik.birthdayreminder.model.Event;
+import com.rolnik.birthdayreminder.model.PhoneContact;
+import com.rolnik.birthdayreminder.notificationserivces.AlarmCreator;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.Callable;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.databinding.DataBindingUtil;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.MaybeObserver;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+
+import static com.github.florent37.runtimepermission.RuntimePermission.askPermission;
 
 public class AddEventActivity extends AppCompatActivity {
     @BindView(R.id.root)
@@ -44,28 +57,35 @@ public class AddEventActivity extends AppCompatActivity {
     TextInputLayout textInputLayout;
     @BindView(R.id.eventTitle)
     TextInputEditText eventTitle;
+    @BindView(R.id.contacts)
+    Spinner contacts;
+    @BindView(R.id.phoneSwitch)
+    CheckBox phoneSwitch;
 
     private DatePickerDialog datePickerDialog;
     private ActivityAddEventBinding activityAddEventBinding;
-    private Disposable disposable;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initBinding();
+        activityAddEventBinding = DataBindingUtil.setContentView(this, R.layout.activity_add_event);
         ButterKnife.bind(this);
 
-        initDatePickerDialog();
-        initSpinner();
+        initPhoneSwitch();
+        initEventBinding();
+        initEventTypeSpinner();
         initTitleText();
+        initDatePickerDialog();
+        askForPermission();
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
 
-        if(disposable != null){
-            disposable.dispose();
+        if (compositeDisposable != null) {
+            compositeDisposable.dispose();
         }
     }
 
@@ -74,7 +94,7 @@ public class AddEventActivity extends AppCompatActivity {
     }
 
     public void save(View view) {
-        if(checkIfEventsIsValid()){
+        if (checkIfEventsIsValid()) {
             saveEvent();
         }
     }
@@ -84,12 +104,10 @@ public class AddEventActivity extends AppCompatActivity {
     }
 
 
-
-    private void initBinding() {
-        activityAddEventBinding = DataBindingUtil.setContentView(this, R.layout.activity_add_event);
+    private void initEventBinding() {
         Event event;
 
-        if(getIntent().hasExtra(getString(R.string.event))){
+        if (getIntent().hasExtra(getString(R.string.event))) {
             event = (Event) getIntent().getSerializableExtra(getString(R.string.event));
         } else {
             event = new Event();
@@ -99,8 +117,20 @@ public class AddEventActivity extends AppCompatActivity {
         activityAddEventBinding.setEvent(event);
     }
 
-    private void initSpinner() {
+    private void initEventTypeSpinner() {
         eventType.setAdapter(new EventTypeAdapter(this, android.R.layout.simple_list_item_1));
+    }
+
+    private void initContactsSpinner(List<PhoneContact> phoneContacts) {
+        Collections.sort(phoneContacts, (phoneContact, t1) -> phoneContact.getName().compareTo(t1.getName()));
+        contacts.setAdapter(new PhoneContactsAdapter(this, R.layout.phonecontact_spinner_layout, phoneContacts));
+
+        PhoneContact currentPhoneContact = activityAddEventBinding.getEvent().getPhoneContact();
+
+        if(currentPhoneContact != null){
+            int pos = ((PhoneContactsAdapter) contacts.getAdapter()).getPosition(currentPhoneContact);
+            contacts.setSelection(pos, true);
+        }
     }
 
     private void initDatePickerDialog() {
@@ -111,11 +141,11 @@ public class AddEventActivity extends AppCompatActivity {
         });
     }
 
-    private void initTitleText(){
+    private void initTitleText() {
         eventTitle.addTextChangedListener(new TextWatcherAdapter() {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(charSequence.length() == 0){
+                if (charSequence.length() == 0) {
                     textInputLayout.setError(getString(R.string.fill_title));
                 } else {
                     textInputLayout.setError(null);
@@ -124,16 +154,33 @@ public class AddEventActivity extends AppCompatActivity {
         });
     }
 
-    private boolean checkIfEventsIsValid(){
+    private void initPhoneSwitch() {
+        phoneSwitch.setOnCheckedChangeListener((compoundButton, b) -> {
+            int visibility = b ? View.VISIBLE : View.GONE;
+            TransitionManager.beginDelayedTransition(root);
+            contacts.setVisibility(visibility);
+            if(!b){
+                activityAddEventBinding.getEvent().setPhoneContact(null);
+            }
+        });
+    }
+
+    private void askForPermission() {
+        askPermission(this).request(Manifest.permission.READ_CONTACTS).onAccepted(result -> {
+            downloadContacts();
+        }).ask();
+    }
+
+    private boolean checkIfEventsIsValid() {
         Event createdEvent = activityAddEventBinding.getEvent();
 
-        if(createdEvent == null){
+        if (createdEvent == null) {
             //TODO
             return false;
-        } else if(createdEvent.getDate() == null){
+        } else if (createdEvent.getDate() == null) {
             showToast(getString(R.string.fill_date));
             return false;
-        } else if(createdEvent.getTitle() == null || createdEvent.getTitle().isEmpty()){
+        } else if (createdEvent.getTitle() == null || createdEvent.getTitle().isEmpty()) {
             textInputLayout.setError(getString(R.string.fill_title));
             return false;
         }
@@ -145,44 +192,68 @@ public class AddEventActivity extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
-    private void saveEvent(){
+    private void saveEvent() {
         EventDataBase eventDataBase = DataBaseService.getEventDataBaseInstance(getApplicationContext());
 
         Event event = activityAddEventBinding.getEvent();
 
-        eventDataBase.eventDao().insert(event).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new MaybeObserver<Long>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-                Log.i("Saving event", "Starting saving event");
-                disposable = d;
-            }
+        compositeDisposable.add(eventDataBase.eventDao().insert(event).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(id -> {
+                    Log.i("Saving event", "Event successfully add with id = " + id);
+                    if (event.isHasNotification()) {
+                        event.setId(id.intValue());
+                        AlarmCreator.createAlarm(getApplicationContext(), event);
+                    }
+                    moveToEventsActivity();
+                }, t -> {
+                    Log.e("Saving event", "Error message = " + t.getMessage());
+                    showToast(getString(R.string.saving_error));
+                }));
 
-            @Override
-            public void onSuccess(Long aLong) {
-                Log.i("Saving event", "Event successfully add with id = " + aLong);
-                if(event.isHasNotification()){
-                    event.setId(aLong.intValue());
-                    AlarmCreator.createAlarm(getApplicationContext(), event);
-                }
-                moveToEventsActivity();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.e("Saving event", "Error message = " + e.getMessage());
-            }
-
-            @Override
-            public void onComplete() {
-                Log.i("Saving event", "Saving completed");
-            }
-        });
     }
 
 
-    private void moveToEventsActivity(){
+    private void moveToEventsActivity() {
         Intent intent = new Intent(this, EventsActivity.class);
 
         startActivity(intent);
+    }
+
+    private void downloadContacts() {
+        Callable<List<PhoneContact>> listCallable = this::getContactList;
+        Observable<List<PhoneContact>> phoneContactObservable = Observable.fromCallable(listCallable);
+
+        compositeDisposable.add(phoneContactObservable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(phoneContacts -> {
+                    Log.i("Download contacts", "Downloaded " + phoneContacts.size() + " contacts");
+                    initContactsSpinner(phoneContacts);
+                }, t -> {
+                    Log.e("Download contacts", "Error occured " + t.getMessage());
+                }));
+    }
+
+
+    private List<PhoneContact> getContactList() {
+        Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+        List<PhoneContact> phoneContacts = new ArrayList<>();
+
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+                Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
+                if (phones != null) {
+                    if (phones.moveToNext()) {
+                        String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                        phoneContacts.add(new PhoneContact(name, phoneNumber));
+                    }
+                    phones.close();
+                }
+
+            }
+            cursor.close();
+        }
+
+        return phoneContacts;
     }
 }

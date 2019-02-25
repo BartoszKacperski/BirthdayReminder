@@ -27,6 +27,8 @@
     <string name="open_settings">Otwórz ustawienia</string>
     <string name="icons">Ikony</string>
     <string name="authors">Autorzy</string>
+    <string name="download_error">Nie udało się załadować wydarzeń</string>
+    <string name="saving_error">Nie udało się zapisać wydarzenia</string>
 
     #NOTIFICATIONS
     <string name="channel_id">1013</string>
@@ -42,4 +44,7 @@
     <string name="first_run">Pierwsze uruchomienie</string>
     <string name="phone">telefon</string>
     <string name="sms">sms</string>
+    <string name="removing_error">Nie udało się usunać wydarzeń</string>
+    <string name="phoneNumber">Numer telefonu</string>
+    <string name="phone_contact_missing">Nie dodano kontaktu do wydarzenia</string>
 </resources>

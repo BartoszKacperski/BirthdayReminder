@@ -50,6 +50,7 @@ public class IconInfoDialog extends Dialog {
         credits.addView(createTableRow(R.drawable.anniversary, "Freepik", "https://www.freepik.com/"));
         credits.addView(createTableRow(R.drawable.birthday, "Pixel perfect", "https://www.flaticon.com/authors/pixel-perfect"));
         credits.addView(createTableRow(R.drawable.name, "Icongeek26", "https://www.flaticon.com/authors/icongeek26"));
+        credits.addView(createTableRow(R.drawable.contact, "Smashicons", "https://www.flaticon.com/authors/smashicons"));
     }
 
     private TableRow createTableRow(int imageResourceId, String author, String URL){

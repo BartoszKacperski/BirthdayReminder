@@ -35,8 +35,8 @@ public class AlarmCreator {
 
             calendar.set(Calendar.MONTH, event.getDate().get(Calendar.MONTH));
             calendar.set(Calendar.DAY_OF_MONTH, event.getDate().get(Calendar.DAY_OF_MONTH));
-            calendar.set(Calendar.HOUR_OF_DAY, 4);
-            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 15);
 
 
             Log.i("Time = ", DateUtils.formatDate(calendar));

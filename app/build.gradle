@@ -53,4 +53,7 @@ dependencies {
 
     //ADMOB
     implementation 'com.google.android.gms:play-services-ads:17.1.3'
+
+    //RUNTIME PERMISSIONS
+    implementation 'com.github.florent37:runtime-permission:1.1.0'
 }

@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="8dp"
-                app:selectedValue="@={Event.eventType}" />
+                app:selectedEventTypeValue="@={Event.eventType}" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout"
@@ -129,15 +129,42 @@
 
             </LinearLayout>
 
-            <CheckBox
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
                 android:layout_margin="8dp"
-                android:checked="@={Event.hasNotification}"
-                android:switchPadding="8dp"
-                android:text="@string/notification"
-                android:textColor="@color/bone" />
+                android:orientation="horizontal"
+                android:weightSum="2">
+                <CheckBox
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:checked="@={Event.hasNotification}"
+                    android:switchPadding="8dp"
+                    android:text="@string/notification"
+                    android:textColor="@color/bone" />
+                <CheckBox
+                    android:id="@+id/phoneSwitch"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:switchPadding="8dp"
+                    android:checked="@{Event.phoneContact == null ? false : true}"
+                    android:text="@string/phoneNumber"
+                    android:textColor="@color/bone"/>
+
+            </LinearLayout>
+
+            <Spinner
+                android:id="@+id/contacts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="8dp"
+                android:visibility="gone"
+                app:selectedPhoneContactValue="@={Event.phoneContact}"/>
 
         </LinearLayout>
 

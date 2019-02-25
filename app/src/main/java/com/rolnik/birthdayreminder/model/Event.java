@@ -5,6 +5,7 @@ import android.os.Parcelable;
 import com.rolnik.birthdayreminder.BR;
 
 import androidx.room.ColumnInfo;
+import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -41,12 +42,16 @@ public class Event extends BaseObservable implements Serializable {
     private Calendar date;
     private EventType eventType;
     private boolean hasNotification;
+    @Embedded
+    private PhoneContact phoneContact;
 
-    public Event(int id, String title, Calendar date, EventType eventType) {
+    public Event(int id, String title, Calendar date, EventType eventType, boolean hasNotification, PhoneContact phoneContact) {
         this.id = id;
         this.title = title;
         this.date = date;
         this.eventType = eventType;
+        this.hasNotification = hasNotification;
+        this.phoneContact = phoneContact;
     }
 
     @Ignore
@@ -101,5 +106,15 @@ public class Event extends BaseObservable implements Serializable {
     public void setHasNotification(boolean hasNotification) {
         this.hasNotification = hasNotification;
         notifyPropertyChanged(BR.hasNotification);
+    }
+
+    @Bindable
+    public PhoneContact getPhoneContact() {
+        return phoneContact;
+    }
+
+    public void setPhoneContact(PhoneContact phoneContact) {
+        this.phoneContact = phoneContact;
+        notifyPropertyChanged(BR.phoneContact);
     }
 }

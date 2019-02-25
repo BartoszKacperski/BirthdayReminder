@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -36,7 +37,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.MaybeObserver;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -103,10 +103,10 @@ public class EventsActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
 
-        if(disposables != null){
+        if (disposables != null) {
             disposables.dispose();
         }
     }
@@ -124,13 +124,13 @@ public class EventsActivity extends AppCompatActivity {
         loadEvents();
     }
 
-    private OnSelectedListener createOnSelectedListener(){
+    private OnSelectedListener createOnSelectedListener() {
         return new OnSelectedListener() {
             @Override
             public void onSelected(int position) {
                 Event selectedEvent = eventAdapter.getItem(position);
 
-                if(selectedEvents.contains(selectedEvent)){
+                if (selectedEvents.contains(selectedEvent)) {
                     selectedEvents.remove(selectedEvent);
                 } else {
                     selectedEvents.add(eventAdapter.getItem(position));
@@ -144,7 +144,7 @@ public class EventsActivity extends AppCompatActivity {
         };
     }
 
-    private void startAddEventActivityWithExistedEvent(Event event){
+    private void startAddEventActivityWithExistedEvent(Event event) {
         Intent intent = new Intent(this, AddEventActivity.class);
 
         intent.putExtra(getString(R.string.event), event);
@@ -173,7 +173,7 @@ public class EventsActivity extends AppCompatActivity {
 
     private void initBottomNavigation() {
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
-            switch (item.getItemId()){
+            switch (item.getItemId()) {
                 case R.id.delete:
                     removeEvents();
                     return true;
@@ -186,11 +186,11 @@ public class EventsActivity extends AppCompatActivity {
         });
     }
 
-    public void startFirstAdd(View view){
+    public void startFirstAdd(View view) {
         startAddActivity();
     }
 
-    private void startAddActivity(){
+    private void startAddActivity() {
         Intent intent = new Intent(this, AddEventActivity.class);
 
         startActivity(intent);
@@ -200,81 +200,56 @@ public class EventsActivity extends AppCompatActivity {
     private void loadEvents() {
         EventDataBase eventDataBase = DataBaseService.getEventDataBaseInstance(getApplicationContext());
 
-        eventDataBase.eventDao().getAll().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<Event>>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-                Log.i("Loading events", "Loading events started");
-                disposables.add(d);
-            }
-
-            @Override
-            public void onNext(List<Event> events) {
-                Log.i("Loading events", "Loaded " + events.size() + " events");
-                showAddFirstButtonIf(events.isEmpty());
-                eventAdapter.clear();
-                eventAdapter.addAll(events);
-            }
-
-            @Override
-            public void onError(Throwable t) {
-                Log.e("Loading events", "Error message = " + t.getMessage());
-            }
-
-            @Override
-            public void onComplete() {
-                Log.i("Loading events", "Loading events completed");
-            }
-        });
+        disposables.add(eventDataBase.eventDao().getAll().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
+                eventsList -> {
+                    Log.i("Loading events", "Loaded " + eventsList.size() + " events");
+                    showAddFirstButtonIf(eventsList.isEmpty());
+                    eventAdapter.clear();
+                    eventAdapter.addAll(eventsList);
+                }, t -> {
+                    Log.e("Loading events", "Error message = " + t.getMessage());
+                    showToast(getString(R.string.download_error));
+                }
+        ));
     }
 
-    private void removeEvents(){
+    private void removeEvents() {
         EventDataBase eventDataBase = DataBaseService.getEventDataBaseInstance(getApplicationContext());
 
-        eventDataBase.eventDao().deleteAll(selectedEvents).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new MaybeObserver<Integer>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-                disposables.add(d);
-                Log.i("Deleting events", "Deleting started");
-            }
-
-            @Override
-            public void onSuccess(Integer integer) {
-                Log.i("Deleting events", "Deleted " + integer + " events");
-                for(Event event : selectedEvents) {
-                    AlarmCreator.cancelAlarm(getApplicationContext(), event);
+        disposables.add(eventDataBase.eventDao().deleteAll(selectedEvents).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
+                integer -> {
+                    Log.i("Deleting events", "Deleted " + integer + " events");
+                    for (Event event : selectedEvents) {
+                        AlarmCreator.cancelAlarm(getApplicationContext(), event);
+                    }
+                    selectedEvents.clear();
+                    changeRecyclerModeToShow();
+                }, t -> {
+                    Log.e("Deleting events", "Error message " + t.getMessage());
+                    showToast(getString(R.string.removing_error));
                 }
-                selectedEvents.clear();
-                changeRecyclerModeToShow();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.e("Deleting events", "Error message " + e.getMessage());
-            }
-
-            @Override
-            public void onComplete() {
-                Log.i("Deleting events", "Deleting completed");
-            }
-        });
-
+        ));
     }
 
-    private void changeRecyclerModeToShow(){
+    private void showToast(String message){
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
+    private void changeRecyclerModeToShow() {
         eventAdapter.setMode(EventAdapter.Mode.SHOW);
         TransitionManager.beginDelayedTransition(root);
         bottomNavigationView.setVisibility(View.GONE);
         adView.setVisibility(View.VISIBLE);
     }
 
-    private void changeRecyclerModeToSelect(){
+    private void changeRecyclerModeToSelect() {
         eventAdapter.setMode(EventAdapter.Mode.SELECT);
         TransitionManager.beginDelayedTransition(root);
         bottomNavigationView.setVisibility(View.VISIBLE);
         adView.setVisibility(View.GONE);
     }
 
-    private void showAddFirstButtonIf(boolean emptyEvents){
+    private void showAddFirstButtonIf(boolean emptyEvents) {
         int visibility = emptyEvents ? View.VISIBLE : View.GONE;
 
         TransitionManager.beginDelayedTransition(root);
