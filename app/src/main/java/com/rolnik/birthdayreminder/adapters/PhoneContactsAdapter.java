@@ -27,6 +27,18 @@ public class PhoneContactsAdapter extends ArrayAdapter<PhoneContact> {
         this.phoneContacts = phoneContacts;
     }
 
+
+    public void add(PhoneContact phoneContact){
+        phoneContacts.add(phoneContact);
+        notifyDataSetChanged();
+    }
+
+    public void addAll(List<PhoneContact> phoneContactList){
+        for(PhoneContact phoneContact : phoneContactList){
+            this.add(phoneContact);
+        }
+    }
+
     @Override
     public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent){
         PhoneContactDropdownViewHolder holder;

@@ -1,11 +1,16 @@
 package com.rolnik.birthdayreminder.activities;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.rolnik.birthdayreminder.R;
@@ -17,12 +22,16 @@ import com.rolnik.birthdayreminder.model.PhoneContact;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class NotificationEvent extends AppCompatActivity {
+    @BindView(R.id.eventImage)
+    ImageView imageView;
 
     private ActivityNotificationEventBinding activityNotificationEventBinding;
     private Disposable d;
@@ -31,11 +40,17 @@ public class NotificationEvent extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityNotificationEventBinding = DataBindingUtil.setContentView(this, R.layout.activity_notification_event);
+        ButterKnife.bind(this);
 
         if (getIntent().hasExtra(getString(R.string.event_id))) {
             int id = getIntent().getIntExtra(getString(R.string.event_id), -1);
             Log.i("Event id =", " " + id);
             downloadEvent(id);
+        }
+
+
+        if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            imageView.setVisibility(View.GONE);
         }
     }
 

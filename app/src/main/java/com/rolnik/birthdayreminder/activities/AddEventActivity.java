@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -28,10 +27,13 @@ import com.rolnik.birthdayreminder.model.Event;
 import com.rolnik.birthdayreminder.model.PhoneContact;
 import com.rolnik.birthdayreminder.notificationserivces.AlarmCreator;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.Callable;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -75,6 +77,7 @@ public class AddEventActivity extends AppCompatActivity {
         initPhoneSwitch();
         initEventBinding();
         initEventTypeSpinner();
+        initPhoneContactsSpinner();
         initTitleText();
         initDatePickerDialog();
         askForPermission();
@@ -121,16 +124,26 @@ public class AddEventActivity extends AppCompatActivity {
         eventType.setAdapter(new EventTypeAdapter(this, android.R.layout.simple_list_item_1));
     }
 
-    private void initContactsSpinner(List<PhoneContact> phoneContacts) {
-        Collections.sort(phoneContacts, (phoneContact, t1) -> phoneContact.getName().compareTo(t1.getName()));
-        contacts.setAdapter(new PhoneContactsAdapter(this, R.layout.phonecontact_spinner_layout, phoneContacts));
+    private void initPhoneContactsSpinner(){
+        contacts.setAdapter(new PhoneContactsAdapter(this, R.layout.phonecontact_spinner_layout, new ArrayList<>()));
 
-        PhoneContact currentPhoneContact = activityAddEventBinding.getEvent().getPhoneContact();
+        PhoneContact eventPhoneContact = activityAddEventBinding.getEvent().getPhoneContact();
 
-        if(currentPhoneContact != null){
-            int pos = ((PhoneContactsAdapter) contacts.getAdapter()).getPosition(currentPhoneContact);
-            contacts.setSelection(pos, true);
+        if(eventPhoneContact != null){
+            ((PhoneContactsAdapter)contacts.getAdapter()).add(eventPhoneContact);
         }
+    }
+
+    private void sortContacts(List<PhoneContact> phoneContacts){
+        Collator coll = Collator.getInstance(Locale.getDefault());
+        coll.setStrength(Collator.PRIMARY);
+
+        Collections.sort(phoneContacts, (phoneContact1, phoneContact2) -> coll.compare(phoneContact1.getName(), phoneContact2.getName()));
+    }
+
+    private void addContactsToSpinner(List<PhoneContact> phoneContacts) {
+        sortContacts(phoneContacts);
+        ((PhoneContactsAdapter)contacts.getAdapter()).addAll(phoneContacts);
     }
 
     private void initDatePickerDialog() {
@@ -226,10 +239,8 @@ public class AddEventActivity extends AppCompatActivity {
         compositeDisposable.add(phoneContactObservable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(phoneContacts -> {
                     Log.i("Download contacts", "Downloaded " + phoneContacts.size() + " contacts");
-                    initContactsSpinner(phoneContacts);
-                }, t -> {
-                    Log.e("Download contacts", "Error occured " + t.getMessage());
-                }));
+                    addContactsToSpinner(phoneContacts);
+                }, t -> Log.e("Download contacts", "Error occured " + t.getMessage())));
     }
 
 

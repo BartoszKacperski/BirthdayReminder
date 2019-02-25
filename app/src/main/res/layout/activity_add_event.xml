@@ -164,6 +164,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="8dp"
                 android:visibility="gone"
+                android:animateLayoutChanges="true"
                 app:selectedPhoneContactValue="@={Event.phoneContact}"/>
 
         </LinearLayout>
