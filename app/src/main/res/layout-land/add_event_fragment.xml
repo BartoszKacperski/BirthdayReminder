@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="Event"
+            type="com.rolnik.birthdayreminder.model.Event" />
+
+        <import type="com.rolnik.birthdayreminder.activities.DataBindingAdapters" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bone"
+        tools:context=".fragments.AddEventFragment">
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:id="@+id/eventRoot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/rounded_rectangle"
+                android:backgroundTint="@color/steelBlue"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <Spinner
+                    android:id="@+id/eventType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="8dp"
+                    app:selectedEventTypeValue="@={Event.eventType}" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/title"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="50"
+                    app:counterOverflowTextAppearance="@style/MyOverflowText"
+                    app:errorEnabled="true"
+                    app:errorTextAppearance="@style/MyErrorText"
+                    app:hintTextAppearance="@style/MyHintText">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/eventTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:ems="10"
+                        android:hint="@string/title"
+                        android:inputType="text"
+                        android:text="@={Event.title}"
+                        android:textColor="@color/bone"
+                        android:theme="@style/MyEditText"
+                        tools:ignore="Autofill,LabelFor" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1"
+                        android:text="@{DataBindingAdapters.calendarToStringFullNameMonths(Event.date)}"
+                        android:textAlignment="center"
+                        android:textColor="@color/bone" />
+
+                    <Button
+                        android:id="@+id/showDatePicker"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="@drawable/rounded_rectangle"
+                        android:backgroundTint="@color/bone"
+                        android:padding="8dp"
+                        android:text="@string/showDate"
+                        android:textColor="@color/steelBlue" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <CheckBox
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:layout_weight="1"
+                        android:checked="@={Event.hasNotification}"
+                        android:switchPadding="8dp"
+                        android:text="@string/notification"
+                        android:textColor="@color/bone" />
+
+                    <CheckBox
+                        android:id="@+id/phoneSwitch"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:layout_weight="1"
+                        android:checked="@{Event.phoneContact == null ? false : true}"
+                        android:switchPadding="8dp"
+                        android:text="@string/phoneNumber"
+                        android:textColor="@color/bone" />
+
+                </LinearLayout>
+
+                <Spinner
+                    android:id="@+id/contacts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="8dp"
+                    android:animateLayoutChanges="true"
+                    android:visibility="gone"
+                    app:selectedPhoneContactValue="@={Event.phoneContact}" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end">
+
+                    <Button
+                        android:id="@+id/cancelButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:background="@drawable/rounded_rectangle"
+                        android:backgroundTint="@color/bone"
+                        android:text="@string/cancel"
+                        android:textColor="@color/steelBlue" />
+
+                    <Button
+                        android:id="@+id/saveButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:background="@drawable/rounded_rectangle"
+                        android:backgroundTint="@color/bone"
+                        android:text="@string/save"
+                        android:textColor="@color/steelBlue" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

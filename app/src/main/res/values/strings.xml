@@ -47,4 +47,7 @@
     <string name="removing_error">Nie udało się usunać wydarzeń</string>
     <string name="phoneNumber">Numer telefonu</string>
     <string name="phone_contact_missing">Nie dodano kontaktu do wydarzenia</string>
+    <string name="tablets_land">TabletLandscape</string>
+    <string name="normal">normalny</string>
+    <string name="add_fragment">fragment dodawania</string>
 </resources>

@@ -22,6 +22,8 @@ import com.rolnik.birthdayreminder.database.DataBaseService;
 import com.rolnik.birthdayreminder.database.EventDataBase;
 import com.rolnik.birthdayreminder.dialogs.IconInfoDialog;
 import com.rolnik.birthdayreminder.dialogs.NotificationInfoDialog;
+import com.rolnik.birthdayreminder.fragments.AddEventFragment;
+import com.rolnik.birthdayreminder.fragments.FragmentCallback;
 import com.rolnik.birthdayreminder.model.Event;
 import com.rolnik.birthdayreminder.notificationserivces.AlarmCreator;
 
@@ -33,17 +35,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class EventsActivity extends AppCompatActivity {
+public class EventsActivity extends AppCompatActivity implements FragmentCallback {
     @BindView(R.id.root)
     CoordinatorLayout root;
     @BindView(R.id.events)
@@ -89,7 +91,7 @@ public class EventsActivity extends AppCompatActivity {
                 changeRecyclerModeToSelect();
                 return true;
             case R.id.add:
-                startAddActivity();
+                showAddEvent();
                 return true;
             case R.id.notification:
                 showNotificationInfoDialog();
@@ -109,6 +111,16 @@ public class EventsActivity extends AppCompatActivity {
         if (disposables != null) {
             disposables.dispose();
         }
+    }
+
+    @Override
+    public void onSave() {
+        removeAddFragment();
+    }
+
+    @Override
+    public void onCancel() {
+        removeAddFragment();
     }
 
     private void initEvents() {
@@ -139,17 +151,67 @@ public class EventsActivity extends AppCompatActivity {
 
             @Override
             public void onLongClick(int position) {
-                startAddEventActivityWithExistedEvent(eventAdapter.getItem(position));
+                startAddEventWithExistedEvent(eventAdapter.getItem(position));
             }
         };
     }
 
-    private void startAddEventActivityWithExistedEvent(Event event) {
+    private void startAddEventWithExistedEvent(Event event) {
+        String rootTag = (String) root.getTag();
+        Log.i("Root tag ", rootTag);
+
+        if (rootTag.equals(getString(R.string.normal))) {
+            startAddActivityWith(event);
+        } else {
+            showAddFragmentWith(event);
+        }
+
+    }
+
+    private void showAddEvent() {
+        String rootTag = (String) root.getTag();
+        Log.i("Root tag ", rootTag);
+
+        if (rootTag.equals(getString(R.string.normal))) {
+            startAddActivity();
+        } else {
+            showAddFragment();
+        }
+    }
+
+    private void startAddActivity() {
+        Intent intent = new Intent(this, AddEventActivity.class);
+
+        startActivity(intent);
+    }
+
+    private void startAddActivityWith(Event event) {
         Intent intent = new Intent(this, AddEventActivity.class);
 
         intent.putExtra(getString(R.string.event), event);
 
         startActivity(intent);
+    }
+
+    private void showAddFragment() {
+        removeAddFragment();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction().addToBackStack(getString(R.string.add_fragment));
+        fragmentTransaction.replace(R.id.fragmentPlaceholder, AddEventFragment.getInstance(null));
+        fragmentTransaction.commit();
+    }
+
+    private void showAddFragmentWith(Event event) {
+        removeAddFragment();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction().addToBackStack(getString(R.string.add_fragment));
+        fragmentTransaction.replace(R.id.fragmentPlaceholder, AddEventFragment.getInstance(event));
+        fragmentTransaction.commit();
+    }
+
+    private void removeAddFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+            fragmentManager.popBackStackImmediate();
+        }
     }
 
     private void initAdMob() {
@@ -187,13 +249,7 @@ public class EventsActivity extends AppCompatActivity {
     }
 
     public void startFirstAdd(View view) {
-        startAddActivity();
-    }
-
-    private void startAddActivity() {
-        Intent intent = new Intent(this, AddEventActivity.class);
-
-        startActivity(intent);
+        showAddEvent();
     }
 
 
@@ -231,7 +287,7 @@ public class EventsActivity extends AppCompatActivity {
         ));
     }
 
-    private void showToast(String message){
+    private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 

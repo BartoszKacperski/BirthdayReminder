@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="Event"
+            type="com.rolnik.birthdayreminder.model.Event"/>
+        <import type="com.rolnik.birthdayreminder.activities.DataBindingAdapters"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bone"
+        tools:context=".activities.NotificationEvent">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="256dp"
+            android:layout_height="256dp"
+            android:background="@drawable/circle_button"
+            android:backgroundTint="@color/steelBlue"
+            android:orientation="vertical"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/eventType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_gravity="center"
+                android:text="@{DataBindingAdapters.eventTypeToStringResourceId(Event.eventType)}"
+                android:textAlignment="center"
+                android:textColor="@color/bone"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/eventTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_gravity="center"
+                android:text="@{Event.title}"
+                android:textColor="@color/bone"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:maxLines="3"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/phone"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/circle_button"
+                    android:backgroundTint="@color/bone"
+                    android:contentDescription="@string/phone"
+                    android:padding="8dp"
+                    android:tint="@color/steelBlue"
+                    android:onClick="call"
+                    app:srcCompat="@drawable/ic_phone_black" />
+
+                <ImageButton
+                    android:id="@+id/imageButton2"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/circle_button"
+                    android:backgroundTint="@color/bone"
+                    android:contentDescription="@string/sms"
+                    android:padding="8dp"
+                    android:tint="@color/steelBlue"
+                    android:onClick="openSms"
+                    app:srcCompat="@drawable/ic_sms_black" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/eventImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="8dp"
+                android:tint="@color/bone"
+                app:load_image="@{Event.eventType}" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
