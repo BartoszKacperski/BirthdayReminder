@@ -4,13 +4,10 @@
     <string name="name_day">Imieniny </string>
     <string name="anniversary">Rocznica</string>
     <string name="party">Impreza</string>
-    <string name="settings">ustawienia</string>
     <string name="delete">Usuń</string>
     <string name="add">Dodaj</string>
     <string name="title">Tytuł</string>
     <string name="showDate">Wybierz date</string>
-    <string name="month">Miesiąc</string>
-    <string name="day">Dzień</string>
     <string name="error">Błąd</string>
     <string name="type">Rodzaj</string>
     <string name="background">tło</string>
@@ -34,7 +31,6 @@
     <string name="channel_id">1013</string>
     <string name="channel_name">my_channel</string>
     <string name="shared_pref_name">notifications</string>
-    <string name="notification_sp">notification</string>
     <string name="notification_id">notification_id</string>
     <string name="event_id">id_wydarzenia</string>
     <string name="event">wydarzenie</string>
@@ -50,4 +46,6 @@
     <string name="tablets_land">TabletLandscape</string>
     <string name="normal">normalny</string>
     <string name="add_fragment">fragment dodawania</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="today_events">Dzisiejsze wydarzenia</string>
 </resources>

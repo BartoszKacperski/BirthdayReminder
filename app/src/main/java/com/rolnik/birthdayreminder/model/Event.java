@@ -1,21 +1,17 @@
 package com.rolnik.birthdayreminder.model;
 
-import android.os.Parcelable;
-
 import com.rolnik.birthdayreminder.BR;
-
-import androidx.room.ColumnInfo;
-import androidx.room.Embedded;
-import androidx.room.Entity;
-import androidx.room.Ignore;
-import androidx.room.PrimaryKey;
-import androidx.databinding.BaseObservable;
-import androidx.databinding.Bindable;
-import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 import java.util.Calendar;
 
+import androidx.annotation.NonNull;
+import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
+import androidx.room.Embedded;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)

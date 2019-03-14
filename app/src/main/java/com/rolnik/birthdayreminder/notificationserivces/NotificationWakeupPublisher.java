@@ -20,14 +20,24 @@ public class NotificationWakeupPublisher extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (Objects.requireNonNull(intent.getAction()).equals("android.intent.action.BOOT_COMPLETED")) {
             Log.i("Restarted device", "Remake alarms");
-            EventDataBase eventDataBase = DataBaseService.getEventDataBaseInstance(context);
-
-            eventDataBase.eventDao().getAll().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).doOnNext(events -> {
-                for (Event event : events) {
-                    AlarmCreator.createAlarm(context, event);
-                }
-            }).subscribe();
+            renewEventAlarms(context);
+            renewYearlyAlarm(context);
         }
+    }
+
+
+    private void renewEventAlarms(final Context context){
+        EventDataBase eventDataBase = DataBaseService.getEventDataBaseInstance(context);
+
+        eventDataBase.eventDao().getAll().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).doOnNext(events -> {
+            for (Event event : events) {
+                AlarmCreator.createAlarm(context, event);
+            }
+        }).subscribe();
+    }
+
+    private void renewYearlyAlarm(final Context context){
+        AlarmCreator.createYearAlarm(context);
     }
 
 
