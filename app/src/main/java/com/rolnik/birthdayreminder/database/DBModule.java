@@ -9,6 +9,9 @@ import javax.inject.Singleton;
 import androidx.room.Room;
 import dagger.Module;
 import dagger.Provides;
+import lombok.Getter;
+
+@Getter
 
 @Module
 public class DBModule {
