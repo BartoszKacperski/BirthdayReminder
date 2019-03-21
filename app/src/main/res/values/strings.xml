@@ -50,4 +50,5 @@
     <string name="today_events">Dzisiejsze wydarzenia</string>
 
     <string name="database_name">BirthdayDB</string>
+    <string name="no_events">Brak wydarzeń</string>
 </resources>

@@ -10,11 +10,18 @@
         android:loopViews="true"
         android:numColumns="2"/>
 
-    <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/stackEmptyView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/ic_error_black"
-        android:backgroundTint="@color/bone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/widget_item_background"
+        android:text="@string/no_events"
+        android:textColor="@color/steelBlue"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:padding="8dp"
+        android:lines="2"
+        android:maxLines="2"
+        android:drawableBottom="@drawable/sad"
         android:contentDescription="@string/error"/>
 </FrameLayout>
