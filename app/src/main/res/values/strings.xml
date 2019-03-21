@@ -48,4 +48,6 @@
     <string name="add_fragment">fragment dodawania</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="today_events">Dzisiejsze wydarzenia</string>
+
+    <string name="database_name">BirthdayDB</string>
 </resources>

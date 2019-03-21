@@ -1,4 +1,4 @@
-package com.rolnik.birthdayreminder;
+package com.rolnik.birthdayreminder.utils;
 
 import java.util.Calendar;
 import java.util.Locale;

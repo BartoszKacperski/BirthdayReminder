@@ -1,4 +1,4 @@
-package com.rolnik.birthdayreminder;
+package com.rolnik.birthdayreminder.widget;
 
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
@@ -6,29 +6,24 @@ import android.content.Intent;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import com.rolnik.birthdayreminder.R;
 import com.rolnik.birthdayreminder.activities.DataBindingAdapters;
-import com.rolnik.birthdayreminder.database.DataBaseService;
 import com.rolnik.birthdayreminder.database.EventDataBase;
 import com.rolnik.birthdayreminder.model.Event;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class StackWidgetService extends RemoteViewsService {
-    @Override
-    public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        return new StackRemoteViewsFactory(this.getApplicationContext(), intent);
-    }
-}
-
-class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
+public class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     private List<Event> events = new ArrayList<>();
     private Context context;
+    private EventDataBase eventDataBase;
     private int mAppWidgetId;
 
-    public StackRemoteViewsFactory(Context context, Intent intent) {
+    public StackRemoteViewsFactory(Context context, Intent intent, EventDataBase eventDataBase) {
         this.context = context;
         this.mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+        this.eventDataBase = eventDataBase;
     }
 
     public void onCreate() {
@@ -77,12 +72,10 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     }
 
     public void onDataSetChanged() {
-        //downloadEvents();
+        downloadEvents();
     }
 
     public void downloadEvents(){
-        EventDataBase eventDataBase = DataBaseService.getEventDataBaseInstance(context);
-
         this.events.addAll(eventDataBase.eventDao().getAll().blockingFirst());
     }
 }

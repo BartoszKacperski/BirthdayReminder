@@ -3,22 +3,24 @@ package com.rolnik.birthdayreminder;
 import android.app.Application;
 import android.content.SharedPreferences;
 
+import com.rolnik.birthdayreminder.components.DBComponent;
+import com.rolnik.birthdayreminder.components.DaggerDBComponent;
+import com.rolnik.birthdayreminder.database.DBModule;
 import com.rolnik.birthdayreminder.notificationserivces.AlarmCreator;
 
-import java.util.Calendar;
-
 public class BirthdayReminderApplication extends Application {
+    private DBComponent dbComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        if(checkIfFirstRun()){
+        if (checkIfFirstRun()) {
             scheduleAlarms();
         }
     }
 
-    private boolean checkIfFirstRun(){
+    private boolean checkIfFirstRun() {
         SharedPreferences sharedPreferences = this.getSharedPreferences(getString(R.string.shared_pref_name), MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -33,4 +35,13 @@ public class BirthdayReminderApplication extends Application {
         AlarmCreator.createYearAlarm(getApplicationContext());
     }
 
+    public DBComponent getDbComponent() {
+        if (dbComponent == null) {
+            dbComponent = DaggerDBComponent.builder()
+                    .dBModule(new DBModule(getApplicationContext()))
+                    .build();
+        }
+
+        return dbComponent;
+    }
 }

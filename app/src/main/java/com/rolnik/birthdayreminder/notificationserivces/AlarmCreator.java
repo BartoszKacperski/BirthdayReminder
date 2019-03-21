@@ -6,13 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.rolnik.birthdayreminder.DateUtils;
+import com.rolnik.birthdayreminder.utils.DateUtils;
 import com.rolnik.birthdayreminder.R;
 import com.rolnik.birthdayreminder.model.Event;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.concurrent.TimeUnit;
 
 public class AlarmCreator {
 

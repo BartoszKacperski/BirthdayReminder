@@ -1,29 +1,30 @@
 package com.rolnik.birthdayreminder.activities;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.rolnik.birthdayreminder.BirthdayReminderApplication;
 import com.rolnik.birthdayreminder.R;
-import com.rolnik.birthdayreminder.database.DataBaseService;
 import com.rolnik.birthdayreminder.database.EventDataBase;
 import com.rolnik.birthdayreminder.databinding.ActivityNotificationEventBinding;
 import com.rolnik.birthdayreminder.model.PhoneContact;
 
+import javax.inject.Inject;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class NotificationEvent extends AppCompatActivity {
+public class NotificationEventActivity extends AppCompatActivity {
+    @Inject
+    EventDataBase eventDataBase;
+
     private ActivityNotificationEventBinding activityNotificationEventBinding;
     private Disposable d;
 
@@ -31,6 +32,7 @@ public class NotificationEvent extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityNotificationEventBinding = DataBindingUtil.setContentView(this, R.layout.activity_notification_event);
+        ((BirthdayReminderApplication) getApplication()).getDbComponent().inject(this);
 
         if (getIntent().hasExtra(getString(R.string.event_id))) {
             int id = getIntent().getIntExtra(getString(R.string.event_id), -1);
@@ -49,8 +51,6 @@ public class NotificationEvent extends AppCompatActivity {
     }
 
     private void downloadEvent(final int id) {
-        EventDataBase eventDataBase = DataBaseService.getEventDataBaseInstance(getApplicationContext());
-
         d = eventDataBase.eventDao().getEventWith(id).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(event -> {
                     activityNotificationEventBinding.setEvent(event);

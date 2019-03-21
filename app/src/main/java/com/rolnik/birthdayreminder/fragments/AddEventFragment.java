@@ -18,11 +18,11 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.rolnik.birthdayreminder.BirthdayReminderApplication;
 import com.rolnik.birthdayreminder.R;
-import com.rolnik.birthdayreminder.TextWatcherAdapter;
+import com.rolnik.birthdayreminder.utils.TextWatcherAdapter;
 import com.rolnik.birthdayreminder.adapters.EventTypeAdapter;
 import com.rolnik.birthdayreminder.adapters.PhoneContactsAdapter;
-import com.rolnik.birthdayreminder.database.DataBaseService;
 import com.rolnik.birthdayreminder.database.EventDataBase;
 import com.rolnik.birthdayreminder.databinding.AddEventFragmentBinding;
 import com.rolnik.birthdayreminder.dialogs.DatePickerDialog;
@@ -37,6 +37,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Callable;
+
+import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -86,6 +88,9 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
     @BindView(R.id.showDatePicker)
     Button showDatePicker;
 
+    @Inject
+    EventDataBase eventDataBase;
+
     private DatePickerDialog datePickerDialog;
     private AddEventFragmentBinding addEventFragmentBinding;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -133,6 +138,7 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
             throw new ClassCastException(context.toString()
                     + " must implement " + FragmentCallback.class.getName());
         }
+        ((BirthdayReminderApplication)context.getApplicationContext()).getDbComponent().inject(this);
     }
 
     @Override
@@ -267,8 +273,6 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
     }
 
     private void saveEvent() {
-        EventDataBase eventDataBase = DataBaseService.getEventDataBaseInstance(activity.getApplicationContext());
-
         Event event = addEventFragmentBinding.getEvent();
 
         compositeDisposable.add(eventDataBase.eventDao().insert(event).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())

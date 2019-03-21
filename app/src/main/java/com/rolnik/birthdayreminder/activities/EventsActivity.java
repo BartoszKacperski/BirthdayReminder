@@ -15,10 +15,10 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.rolnik.birthdayreminder.BirthdayReminderApplication;
 import com.rolnik.birthdayreminder.R;
 import com.rolnik.birthdayreminder.adapters.EventAdapter;
 import com.rolnik.birthdayreminder.adapters.OnSelectedListener;
-import com.rolnik.birthdayreminder.database.DataBaseService;
 import com.rolnik.birthdayreminder.database.EventDataBase;
 import com.rolnik.birthdayreminder.dialogs.IconInfoDialog;
 import com.rolnik.birthdayreminder.dialogs.NotificationInfoDialog;
@@ -30,6 +30,8 @@ import com.rolnik.birthdayreminder.notificationserivces.AlarmCreator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import javax.inject.Inject;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -61,6 +63,9 @@ public class EventsActivity extends AppCompatActivity implements FragmentCallbac
     @BindView(R.id.bottomNavigationView)
     BottomNavigationView bottomNavigationView;
 
+    @Inject
+    EventDataBase eventDataBase;
+
     private EventAdapter eventAdapter;
     private List<Event> selectedEvents = new ArrayList<>();
     private CompositeDisposable disposables = new CompositeDisposable();
@@ -70,6 +75,7 @@ public class EventsActivity extends AppCompatActivity implements FragmentCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events);
         ButterKnife.bind(this);
+        ((BirthdayReminderApplication) getApplication()).getDbComponent().inject(this);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         initEvents();
@@ -254,8 +260,6 @@ public class EventsActivity extends AppCompatActivity implements FragmentCallbac
 
 
     private void loadEvents() {
-        EventDataBase eventDataBase = DataBaseService.getEventDataBaseInstance(getApplicationContext());
-
         disposables.add(eventDataBase.eventDao().getAll().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
                 eventsList -> {
                     Log.i("Loading events", "Loaded " + eventsList.size() + " events");
@@ -270,8 +274,6 @@ public class EventsActivity extends AppCompatActivity implements FragmentCallbac
     }
 
     private void removeEvents() {
-        EventDataBase eventDataBase = DataBaseService.getEventDataBaseInstance(getApplicationContext());
-
         disposables.add(eventDataBase.eventDao().deleteAll(selectedEvents).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
                 integer -> {
                     Log.i("Deleting events", "Deleted " + integer + " events");

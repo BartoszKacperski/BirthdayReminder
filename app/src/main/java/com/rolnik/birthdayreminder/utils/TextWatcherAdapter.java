@@ -1,4 +1,4 @@
-package com.rolnik.birthdayreminder;
+package com.rolnik.birthdayreminder.utils;
 
 import android.text.Editable;
 import android.text.TextWatcher;

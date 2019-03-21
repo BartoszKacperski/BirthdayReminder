@@ -10,7 +10,7 @@ import android.content.SharedPreferences;
 
 import com.rolnik.birthdayreminder.R;
 import com.rolnik.birthdayreminder.activities.DataBindingAdapters;
-import com.rolnik.birthdayreminder.activities.NotificationEvent;
+import com.rolnik.birthdayreminder.activities.NotificationEventActivity;
 import com.rolnik.birthdayreminder.model.Event;
 
 import androidx.core.app.NotificationCompat;
@@ -38,7 +38,7 @@ public class NotificationCreator {
         builder.setAutoCancel(true);
         builder.setCategory(NotificationCompat.CATEGORY_MESSAGE);
 
-        Intent intent = new Intent(context, NotificationEvent.class);
+        Intent intent = new Intent(context, NotificationEventActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra(context.getString(R.string.event_id), currentEvent.getId());
