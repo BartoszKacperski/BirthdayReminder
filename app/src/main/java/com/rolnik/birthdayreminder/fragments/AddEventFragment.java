@@ -90,9 +90,10 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
 
     @Inject
     EventDataBase eventDataBase;
+    public AddEventFragmentBinding addEventFragmentBinding;
+
 
     private DatePickerDialog datePickerDialog;
-    private AddEventFragmentBinding addEventFragmentBinding;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private Activity activity;
     private FragmentCallback fragmentCallback;
