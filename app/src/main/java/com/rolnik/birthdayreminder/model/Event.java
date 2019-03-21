@@ -12,9 +12,11 @@ import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
+@Builder
 
 @Entity(tableName = "events")
 public class Event extends BaseObservable implements Serializable {

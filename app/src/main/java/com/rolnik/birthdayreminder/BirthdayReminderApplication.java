@@ -1,6 +1,7 @@
 package com.rolnik.birthdayreminder;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.rolnik.birthdayreminder.components.DBComponent;
@@ -10,14 +11,19 @@ import com.rolnik.birthdayreminder.notificationserivces.AlarmCreator;
 
 public class BirthdayReminderApplication extends Application {
     private DBComponent dbComponent;
+    private static Context applicationContext;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        BirthdayReminderApplication.applicationContext = getApplicationContext();
 
         if (checkIfFirstRun()) {
             scheduleAlarms();
         }
+    }
+    public static Context getAppContext() {
+        return BirthdayReminderApplication.applicationContext;
     }
 
     private boolean checkIfFirstRun() {

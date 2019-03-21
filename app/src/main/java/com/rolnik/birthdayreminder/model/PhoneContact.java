@@ -6,10 +6,12 @@ import java.io.Serializable;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 
 
 @EqualsAndHashCode(callSuper = false)
+@Builder
 
 public class PhoneContact extends BaseObservable implements Serializable {
     private String name;

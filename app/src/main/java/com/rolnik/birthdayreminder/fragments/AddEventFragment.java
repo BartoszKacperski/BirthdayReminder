@@ -275,7 +275,7 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
     private void saveEvent() {
         Event event = addEventFragmentBinding.getEvent();
 
-        compositeDisposable.add(eventDataBase.eventDao().insert(event).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable.add(eventDataBase.eventDao().update(event).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(id -> {
                     Log.i("Saving event", "Event successfully add with id = " + id);
                     if (event.isHasNotification()) {

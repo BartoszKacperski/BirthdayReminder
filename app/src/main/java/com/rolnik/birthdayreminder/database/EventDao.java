@@ -21,6 +21,8 @@ public interface EventDao {
     @Query("Select * from events where id = :id")
     Single<Event> getEventWith(int id);
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    Maybe<Long> update(Event event);
+    @Insert()
     Maybe<Long> insert(Event event);
     @Delete
     Maybe<Integer> deleteAll(List<Event> events);
