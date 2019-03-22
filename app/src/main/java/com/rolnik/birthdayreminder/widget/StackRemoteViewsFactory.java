@@ -1,5 +1,6 @@
 package com.rolnik.birthdayreminder.widget;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +8,7 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.rolnik.birthdayreminder.R;
+import com.rolnik.birthdayreminder.activities.AddEventActivity;
 import com.rolnik.birthdayreminder.activities.DataBindingAdapters;
 import com.rolnik.birthdayreminder.database.EventDataBase;
 import com.rolnik.birthdayreminder.model.Event;
@@ -46,6 +48,11 @@ public class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
             rv.setTextViewText(R.id.eventTitle, event.getTitle());
             rv.setTextViewText(R.id.eventDate, DataBindingAdapters.calendarToString(event.getDate()));
             rv.setImageViewResource(R.id.eventImage, DataBindingAdapters.eventTypeToDrawableResourceId(event.getEventType()));
+
+            Intent intent = new Intent();
+            intent.putExtra(context.getString(R.string.event), event);
+
+            rv.setOnClickFillInIntent(R.id.root, intent);
         }
 
         return rv;

@@ -29,14 +29,10 @@ public class AlarmCreator {
 
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-
-
-
             calendar.set(Calendar.MONTH, event.getDate().get(Calendar.MONTH));
             calendar.set(Calendar.DAY_OF_MONTH, event.getDate().get(Calendar.DAY_OF_MONTH));
             calendar.set(Calendar.HOUR_OF_DAY, 0);
             calendar.set(Calendar.MINUTE, 15);
-
 
             Log.i("Time = ", DateUtils.formatDate(calendar));
             if (alarmManager != null) {
@@ -59,7 +55,7 @@ public class AlarmCreator {
 
     public static void createYearAlarm(final Context context) {
         Intent intervalIntent = new Intent(context, NotificationIntervalService.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, -1, intervalIntent, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, context.getResources().getInteger(R.integer.pendingYearAlarmID), intervalIntent, PendingIntent.FLAG_ONE_SHOT);
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
