@@ -85,7 +85,7 @@
         android:layout_gravity="bottom"
         android:gravity="center"
         ads:adSize="SMART_BANNER"
-        ads:adUnitId="@string/AD_BANNER_ID" />
+        ads:adUnitId="@string/MAIN_BANNER" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"

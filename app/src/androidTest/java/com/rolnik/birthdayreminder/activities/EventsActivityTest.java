@@ -7,6 +7,7 @@ import com.rolnik.birthdayreminder.mock.MockApplication;
 import com.rolnik.birthdayreminder.model.Event;
 import com.rolnik.birthdayreminder.model.PhoneContact;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -29,7 +30,7 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.CoreMatchers.anything;
+import static org.hamcrest.CoreMatchers.instanceOf;
 
 @LargeTest
 public class EventsActivityTest {
@@ -39,51 +40,33 @@ public class EventsActivityTest {
     public AsyncTaskSchedulerRule asyncTaskSchedulerRule = new AsyncTaskSchedulerRule();
 
     @Before
-    public void setUp(){
+    public void setUp() {
         Intents.init();
+    }
+
+    @After
+    public void tearDown() {
+        Intents.release();
     }
 
     @Test
     public void testFirstAdd() {
-        onView(withId(R.id.addFirstButton)).perform(click());
-        intended(hasComponent(AddEventActivity.class.getName()));
-    }
-
-    @Test
-    public void testFirstAddTablet(){
-        if(Utils.isTablet(MockApplication.getAppContext())){
+        if(!Utils.isTablet(MockApplication.getAppContext())){
             onView(withId(R.id.addFirstButton)).perform(click());
-            onView(withId(R.id.root)).check(matches(isDisplayed()));
+            intended(hasComponent(AddEventActivity.class.getName()));
         }
     }
 
     @Test
-    public void testFilledRecyclerView(){
-        Calendar calendar = new GregorianCalendar(2, 3, 4);
-        PhoneContact phoneContact = PhoneContact.builder()
-                .phoneNumber("123")
-                .name("name")
-                .build();
-
-        Event event = Event.builder()
-                .id(1)
-                .title("tak")
-                .eventType(Event.EventType.PARTY)
-                .date(calendar)
-                .hasNotification(true)
-                .phoneContact(phoneContact)
-                .build();
-
-        long id = activityActivityTestRule.getActivity().eventDataBase.eventDao().insert(event).blockingGet();
-
-        onData(anything()).inAdapterView(withId(R.id.events)).atPosition(0).
-                onChildView(withId(R.id.eventDate)).
-                check(matches(withText("4 IV")));
-
+    public void testFirstAddTablet() {
+        if (Utils.isTablet(MockApplication.getAppContext())) {
+            onView(withId(R.id.addFirstButton)).perform(click());
+            onView(withId(R.id.phoneSwitch)).check(matches(isDisplayed()));
+        }
     }
 
     @Test
-    public void testDeleteFromRecyclerView(){
+    public void testFilledRecyclerView() {
         Calendar calendar = new GregorianCalendar(2, 3, 4);
         PhoneContact phoneContact = PhoneContact.builder()
                 .phoneNumber("123")
@@ -91,7 +74,6 @@ public class EventsActivityTest {
                 .build();
 
         Event event = Event.builder()
-                .id(1)
                 .title("tak")
                 .eventType(Event.EventType.PARTY)
                 .date(calendar)
@@ -101,15 +83,41 @@ public class EventsActivityTest {
 
         long id = activityActivityTestRule.getActivity().eventDataBase.eventDao().insert(event).blockingGet();
 
+        onData(instanceOf(Event.class)).inAdapterView(withId(R.id.events)).atPosition(0).
+                onChildView(withId(R.id.eventDate)).
+                check(matches(withText("4 IV")));
+    }
+
+    @Test
+    public void testDeleteFromRecyclerView() {
+        Calendar calendar = new GregorianCalendar(2, 3, 4);
+        PhoneContact phoneContact = PhoneContact.builder()
+                .phoneNumber("123")
+                .name("name")
+                .build();
+
+        Event event = Event.builder()
+                .title("tak")
+                .eventType(Event.EventType.PARTY)
+                .date(calendar)
+                .hasNotification(true)
+                .phoneContact(phoneContact)
+                .build();
+
+        long id = activityActivityTestRule.getActivity().eventDataBase.eventDao().insert(event).blockingGet();
+        int size = activityActivityTestRule.getActivity().eventDataBase.eventDao().getAll().blockingFirst().size();
+
         openActionBarOverflowOrOptionsMenu(MockApplication.getAppContext());
         onView(withText("Usuń")).perform(click());
-        onView(withId(R.id.events)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        for(int i = 0; i < size;i++){
+            onView(withId(R.id.events)).perform(RecyclerViewActions.actionOnItemAtPosition(i, click()));
+        }
         onView(withId(R.id.delete)).perform(click());
         onView(withId(R.id.addFirstButton)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void testShowNotificationDialog(){
+    public void testShowNotificationDialog() {
         openActionBarOverflowOrOptionsMenu(MockApplication.getAppContext());
         onView(withText("Powiadomienia")).perform(click());
         onView(withText("Aby powiadomienia przychodziły pamiętaj o ich włączęniu w ustawieniach aplikacji")).check(matches(isDisplayed()));
@@ -117,7 +125,7 @@ public class EventsActivityTest {
     }
 
     @Test
-    public void testShowIconDialog(){
+    public void testShowIconDialog() {
         openActionBarOverflowOrOptionsMenu(MockApplication.getAppContext());
         onView(withText("Ikony")).perform(click());
         onView(withText("Autorzy")).check(matches(isDisplayed()));
@@ -125,10 +133,14 @@ public class EventsActivityTest {
     }
 
     @Test
-    public void testAddFromActionBar(){
+    public void testAddFromActionBar() {
         openActionBarOverflowOrOptionsMenu(MockApplication.getAppContext());
         onView(withText("Dodaj")).perform(click());
-        intended(hasComponent(AddEventActivity.class.getName()));
+        if(!Utils.isTablet(MockApplication.getAppContext())){
+            intended(hasComponent(AddEventActivity.class.getName()));
+        } else {
+            onView(withId(R.id.phoneSwitch)).check(matches(isDisplayed()));
+        }
     }
 
 }

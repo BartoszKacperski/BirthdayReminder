@@ -25,7 +25,7 @@ public class NotificationEventActivity extends AppCompatActivity {
     @Inject
     EventDataBase eventDataBase;
 
-    private ActivityNotificationEventBinding activityNotificationEventBinding;
+    ActivityNotificationEventBinding activityNotificationEventBinding;
     private Disposable d;
 
     @Override
@@ -36,7 +36,6 @@ public class NotificationEventActivity extends AppCompatActivity {
 
         if (getIntent().hasExtra(getString(R.string.event_id))) {
             int id = getIntent().getIntExtra(getString(R.string.event_id), -1);
-            Log.i("Event id =", " " + id);
             downloadEvent(id);
         }
     }
@@ -52,10 +51,8 @@ public class NotificationEventActivity extends AppCompatActivity {
 
     private void downloadEvent(final int id) {
         d = eventDataBase.eventDao().getEventWith(id).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(event -> {
-                    activityNotificationEventBinding.setEvent(event);
-                    Log.i("Event id =", " " + event.getId());
-                }, throwable -> Log.e("Error occured", "Message = " + throwable.getMessage()));
+                .subscribe(event -> activityNotificationEventBinding.setEvent(event),
+                        throwable -> Log.e("Error occured", "Message = " + throwable.getMessage()));
     }
 
     public void call(View view) {
@@ -76,9 +73,8 @@ public class NotificationEventActivity extends AppCompatActivity {
         PhoneContact phoneContact = activityNotificationEventBinding.getEvent().getPhoneContact();
 
         if(phoneContact != null){
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setType("vnd.android-dir/mms-sms");
-            intent.putExtra("address", phoneContact.getPhoneNumber());
+            Intent intent = new Intent(Intent.ACTION_SENDTO);
+            intent.setData(Uri.parse("smsto:" + phoneContact.getPhoneNumber()));
 
             if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivity(intent);

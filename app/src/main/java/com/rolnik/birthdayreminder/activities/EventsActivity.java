@@ -2,6 +2,7 @@ package com.rolnik.birthdayreminder.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Debug;
 import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.Menu;
@@ -16,6 +17,7 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.rolnik.birthdayreminder.BirthdayReminderApplication;
+import com.rolnik.birthdayreminder.BuildConfig;
 import com.rolnik.birthdayreminder.R;
 import com.rolnik.birthdayreminder.adapters.EventAdapter;
 import com.rolnik.birthdayreminder.adapters.OnSelectedListener;
@@ -221,9 +223,15 @@ public class EventsActivity extends AppCompatActivity implements FragmentCallbac
     }
 
     private void initAdMob() {
-        MobileAds.initialize(this, getString(R.string.AD_BANNER_ID));
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice("5D7F69A3D73C399D9254BFAE86A8E37B").addTestDevice("62C5E6B1611C3CA6C1DEFA2C30D325EA").build();
-        adView.loadAd(adRequest);
+        MobileAds.initialize(this, getString(R.string.ADMOB_APP_ID));
+        AdRequest.Builder builder = new AdRequest.Builder();
+
+        if(BuildConfig.DEBUG){
+            builder.addTestDevice("5D7F69A3D73C399D9254BFAE86A8E37B")
+                    .addTestDevice("62C5E6B1611C3CA6C1DEFA2C30D325EA");
+        }
+
+        adView.loadAd(builder.build());
     }
 
     private void showNotificationInfoDialog() {

@@ -55,7 +55,6 @@ public class AddEventActivityTest {
         assertThat(event.getDate().get(Calendar.MONTH)).isEqualTo(2);
         assertThat(event.getDate().get(Calendar.DAY_OF_MONTH)).isEqualTo(2);
         assertThat(event.isHasNotification()).isEqualTo(true);
-        assertThat(event.getPhoneContact()).isNull();
     }
 
     @Test

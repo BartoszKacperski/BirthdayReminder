@@ -1,22 +1,23 @@
 <resources>
     <string name="app_name">BirthdayReminder</string>
+    #MODEL
     <string name="birthday">Urodziny</string>
     <string name="name_day">Imieniny </string>
     <string name="anniversary">Rocznica</string>
     <string name="party">Impreza</string>
+    <string name="title">Tytuł</string>
+    #END_MODEL
+
+    #GUI
     <string name="delete">Usuń</string>
     <string name="add">Dodaj</string>
-    <string name="title">Tytuł</string>
     <string name="showDate">Wybierz date</string>
     <string name="error">Błąd</string>
     <string name="type">Rodzaj</string>
     <string name="background">tło</string>
     <string name="accept">OK</string>
     <string name="cancel">Anuluj</string>
-    <string name="notification">Powiadomienie</string>
-    <string name="notifications">Powiadomienia</string>
     <string name="save">Zapisz</string>
-    <string name="AD_BANNER_ID">ca-app-pub-3940256099942544/6300978111</string>
     <string name="add_first_event">Dodaj pierwsze wydarzenie</string>
     <string name="fill_date">Uzupełnij date wydarzenia</string>
     <string name="fill_title">Uzupełnij tytuł wydarzenia</string>
@@ -26,10 +27,19 @@
     <string name="authors">Autorzy</string>
     <string name="download_error">Nie udało się załadować wydarzeń</string>
     <string name="saving_error">Nie udało się zapisać wydarzenia</string>
+    #END_GUI
+
+    #ADMOB
+    <string name="ADMOB_APP_ID">ca-app-pub-2475764705473892~7484598349</string>
+    <string name="MAIN_BANNER">ca-app-pub-2475764705473892/7435457843</string>
+    #END_ADMOB
+
 
     #NOTIFICATIONS
+    <string name="notification">Powiadomienie</string>
+    <string name="notifications">Powiadomienia</string>
     <string name="channel_id">1013</string>
-    <string name="channel_name">my_channel</string>
+    <string name="channel_name">BirthdayReminderChannel</string>
     <string name="shared_pref_name">notifications</string>
     <string name="notification_id">notification_id</string>
     <string name="event_id">id_wydarzenia</string>
@@ -46,8 +56,6 @@
     <string name="tablets_land">TabletLandscape</string>
     <string name="normal">normalny</string>
     <string name="add_fragment">fragment dodawania</string>
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="today_events">Dzisiejsze wydarzenia</string>
 
     <string name="database_name">BirthdayDB</string>
     <string name="no_events">Brak wydarzeń</string>

@@ -2,7 +2,6 @@ package com.rolnik.birthdayreminder.mock;
 
 import com.rolnik.birthdayreminder.BirthdayReminderApplication;
 import com.rolnik.birthdayreminder.components.DBComponent;
-import com.rolnik.birthdayreminder.components.DaggerDBComponent;
 
 public class MockApplication extends BirthdayReminderApplication {
     private DBComponent dbComponent;
@@ -10,7 +9,7 @@ public class MockApplication extends BirthdayReminderApplication {
     @Override
     public DBComponent getDbComponent() {
         if (dbComponent == null) {
-            dbComponent = DaggerDBComponent.builder()
+            dbComponent = DaggerMockDBComponent.builder()
                     .dBModule(new MockDBModule(getApplicationContext()))
                     .build();
         }
