@@ -144,7 +144,6 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        Log.i("Click", " " + view.getId());
         switch (view.getId()){
             case R.id.showDatePicker:
                 showDatePicker();
@@ -256,7 +255,7 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
         Event createdEvent = addEventFragmentBinding.getEvent();
 
         if (createdEvent == null) {
-            //TODO
+            showToast(getString(R.string.add_contact_exception));
             return false;
         } else if (createdEvent.getDate() == null) {
             showToast(getString(R.string.fill_date));
@@ -278,7 +277,6 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
 
         compositeDisposable.add(eventDataBase.eventDao().update(event).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(id -> {
-                    Log.i("Saving event", "Event successfully add with id = " + id);
                     if (event.isHasNotification()) {
                         event.setId(id.intValue());
                         AlarmCreator.createAlarm(activity, event);
@@ -286,7 +284,6 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
 
                     fragmentCallback.onSave();
                 }, t -> {
-                    Log.e("Saving event", "Error message = " + t.getMessage());
                     showToast(getString(R.string.saving_error));
                 }));
 
@@ -298,10 +295,7 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
         Observable<List<PhoneContact>> phoneContactObservable = Observable.fromCallable(listCallable);
 
         compositeDisposable.add(phoneContactObservable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(phoneContacts -> {
-                    Log.i("Download contacts", "Downloaded " + phoneContacts.size() + " contacts");
-                    addContactsToSpinner(phoneContacts);
-                }, t -> Log.e("Download contacts", "Error occured " + t.getMessage())));
+                .subscribe(this::addContactsToSpinner, t -> showToast(getString(R.string.cannot_download_contatcs))));
     }
 
 

@@ -118,6 +118,7 @@
                         android:layout_margin="8dp"
                         android:layout_weight="1"
                         android:checked="@={Event.hasNotification}"
+                        android:layout_gravity="center"
                         android:switchPadding="8dp"
                         android:text="@string/notification"
                         android:textColor="@color/bone" />
@@ -128,6 +129,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
                         android:layout_weight="1"
+                        android:layout_gravity="center"
                         android:checked="@{Event.phoneContact == null ? false : true}"
                         android:switchPadding="8dp"
                         android:text="@string/phoneNumber"

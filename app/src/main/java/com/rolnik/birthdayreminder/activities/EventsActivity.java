@@ -166,7 +166,6 @@ public class EventsActivity extends AppCompatActivity implements FragmentCallbac
 
     private void startAddEventWithExistedEvent(Event event) {
         String rootTag = (String) root.getTag();
-        Log.i("Root tag ", rootTag);
 
         if (rootTag.equals(getString(R.string.normal))) {
             startAddActivityWith(event);
@@ -178,7 +177,6 @@ public class EventsActivity extends AppCompatActivity implements FragmentCallbac
 
     private void showAddEvent() {
         String rootTag = (String) root.getTag();
-        Log.i("Root tag ", rootTag);
 
         if (rootTag.equals(getString(R.string.normal))) {
             startAddActivity();
@@ -270,12 +268,10 @@ public class EventsActivity extends AppCompatActivity implements FragmentCallbac
     private void loadEvents() {
         disposables.add(eventDataBase.eventDao().getAll().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
                 eventsList -> {
-                    Log.i("Loading events", "Loaded " + eventsList.size() + " events");
                     showAddFirstButtonIf(eventsList.isEmpty());
                     eventAdapter.clear();
                     eventAdapter.addAll(eventsList);
                 }, t -> {
-                    Log.e("Loading events", "Error message = " + t.getMessage());
                     showToast(getString(R.string.download_error));
                 }
         ));
@@ -284,14 +280,12 @@ public class EventsActivity extends AppCompatActivity implements FragmentCallbac
     private void removeEvents() {
         disposables.add(eventDataBase.eventDao().deleteAll(selectedEvents).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
                 integer -> {
-                    Log.i("Deleting events", "Deleted " + integer + " events");
                     for (Event event : selectedEvents) {
                         AlarmCreator.cancelAlarm(getApplicationContext(), event);
                     }
                     selectedEvents.clear();
                     changeRecyclerModeToShow();
                 }, t -> {
-                    Log.e("Deleting events", "Error message " + t.getMessage());
                     showToast(getString(R.string.removing_error));
                 }
         ));
