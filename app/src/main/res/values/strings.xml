@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BirthdayReminder</string>
+    <string name="app_name">Urodzina przypominajka</string>
     #MODEL
     <string name="birthday">Urodziny</string>
     <string name="name_day">Imieniny </string>
@@ -56,9 +56,12 @@
     <string name="tablets_land">TabletLandscape</string>
     <string name="normal">normalny</string>
     <string name="add_fragment">fragment dodawania</string>
-
     <string name="database_name">BirthdayDB</string>
     <string name="no_events">Brak wydarzeń</string>
     <string name="cannot_download_contatcs">Nie udało się pobrać kontaktów</string>
     <string name="add_contact_exception">Nie można dodać wydarzenia. Uruchom aplikacje ponownie.</string>
+
+    //ACRA
+    <string name="acra_toast">Aplikacja została zatrzymana, proszę o wysłanie raportu do twórców.</string>
+    //END_ACRA
 </resources>
