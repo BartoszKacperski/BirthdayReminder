@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BirthdayReminder</string>
+    <string name="app_name">Urodzina przypominajka</string>
     #MODEL
     <string name="birthday">Urodziny</string>
     <string name="name_day">Imieniny </string>
